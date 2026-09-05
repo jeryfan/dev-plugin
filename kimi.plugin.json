@@ -1,0 +1,27 @@
+{
+  "name": "dev-plugin",
+  "version": "0.0.1",
+  "description": "Personal cross-tool agent plugin: skills and MCP servers for Claude Code, Codex, Kimi Code and pi.",
+  "keywords": [
+    "personal",
+    "skills",
+    "mcp"
+  ],
+  "author": {
+    "name": "jeryfan"
+  },
+  "license": "MIT",
+  "skills": [
+    "./skills/"
+  ],
+  "mcpServers": {
+    "chrome-devtools": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "chrome-devtools-mcp@latest",
+        "--autoConnect"
+      ]
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "banner-design": {
+    "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
+    "commit": "f3ac195"
+  },
+  "brand": {
+    "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
+    "commit": "f3ac195"
+  },
+  "design": {
+    "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
+    "commit": "f3ac195"
+  },
+  "design-system": {
+    "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
+    "commit": "f3ac195"
+  },
+  "slides": {
+    "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
+    "commit": "f3ac195"
+  },
+  "ui-styling": {
+    "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
+    "commit": "f3ac195"
+  },
+  "ui-ux-pro-max": {
+    "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
+    "commit": "f3ac195"
+  },
+  "frontend-design": {
+    "repo": "https://github.com/anthropics/claude-code.git",
+    "commit": "d7dbd9a"
+  },
+  "diagram-design": {
+    "repo": "https://github.com/cathrynlavery/diagram-design.git",
+    "commit": "4451ead"
+  }
+}

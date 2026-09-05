@@ -1,0 +1,13 @@
+{
+  "name": "jeryfan",
+  "owner": {
+    "name": "jeryfan"
+  },
+  "plugins": [
+    {
+      "name": "dev-plugin",
+      "source": "./",
+      "description": "Personal skills and MCP servers for daily development."
+    }
+  ]
+}

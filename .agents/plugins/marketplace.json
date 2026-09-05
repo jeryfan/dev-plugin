@@ -1,0 +1,11 @@
+{
+  "plugins": [
+    {
+      "name": "dev-plugin",
+      "source": {
+        "path": "./"
+      },
+      "description": "Personal skills and MCP servers for daily development."
+    }
+  ]
+}

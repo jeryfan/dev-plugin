@@ -1,0 +1,14 @@
+[
+  {
+    "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
+    "path": ".claude/skills"
+  },
+  {
+    "repo": "https://github.com/anthropics/claude-code.git",
+    "path": "plugins/frontend-design/skills",
+    "include": ["frontend-design"]
+  },
+  {
+    "repo": "https://github.com/cathrynlavery/diagram-design.git"
+  }
+]
