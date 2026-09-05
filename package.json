@@ -2,14 +2,23 @@
   "name": "dev-plugin",
   "version": "0.0.1",
   "description": "Personal cross-tool agent plugin: skills and MCP servers for Claude Code, Codex, Kimi Code and pi.",
-  "keywords": ["pi-package"],
+  "keywords": [
+    "pi-package"
+  ],
   "license": "MIT",
   "scripts": {
-    "sync": "node scripts/sync-mcp.js && node scripts/sync-skills.js"
+    "sync": "node scripts/sync-mcp.js && node scripts/sync-skills.js",
+    "version": "node scripts/bump-version.js"
   },
   "pi": {
-    "extensions": ["./extensions"],
-    "skills": ["./skills"],
-    "prompts": ["./prompts"]
+    "extensions": [
+      "./extensions"
+    ],
+    "skills": [
+      "./skills"
+    ],
+    "prompts": [
+      "./prompts"
+    ]
   }
 }
