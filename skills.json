@@ -10,5 +10,9 @@
   },
   {
     "repo": "https://github.com/cathrynlavery/diagram-design.git"
+  },
+  {
+    "repo": "https://github.com/microsoft/playwright-cli.git",
+    "include": ["playwright-cli"]
   }
 ]

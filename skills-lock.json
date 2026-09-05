@@ -34,5 +34,9 @@
   "diagram-design": {
     "repo": "https://github.com/cathrynlavery/diagram-design.git",
     "commit": "4451ead"
+  },
+  "playwright-cli": {
+    "repo": "https://github.com/microsoft/playwright-cli.git",
+    "commit": "655530f"
   }
 }
