@@ -8,17 +8,40 @@
   "license": "MIT",
   "scripts": {
     "sync": "node scripts/sync-mcp.js && node scripts/sync-skills.js",
-    "version": "node scripts/bump-version.js"
+    "version": "node scripts/bump-version.js",
+    "postinstall": "node scripts/setup-pi.js"
   },
   "pi": {
     "extensions": [
-      "./extensions"
+      "./extensions",
+      "node_modules/@narumitw/pi-btw/src/index.ts",
+      "node_modules/@narumitw/pi-plan-mode/src/index.ts",
+      "node_modules/pi-rewind/src/index.ts",
+      "node_modules/pi-web-access/index.ts",
+      "node_modules/pi-mcp-adapter/index.ts",
+      "node_modules/context-mode/build/adapters/pi/extension.js",
+      "node_modules/pi-subagents/index.ts",
+      "node_modules/pi-review-loop/index.ts"
     ],
     "skills": [
-      "./skills"
+      "./skills",
+      "node_modules/context-mode/skills",
+      "node_modules/pi-subagents/skills"
     ],
     "prompts": [
-      "./prompts"
+      "./prompts",
+      "node_modules/pi-subagents/prompts",
+      "node_modules/pi-review-loop/prompts"
     ]
+  },
+  "dependencies": {
+    "@narumitw/pi-btw": "^0.57.0",
+    "@narumitw/pi-plan-mode": "^0.56.0",
+    "context-mode": "^1.0.169",
+    "pi-mcp-adapter": "^2.32.1",
+    "pi-review-loop": "^0.4.4",
+    "pi-rewind": "^0.5.0",
+    "pi-subagents": "^0.65.1",
+    "pi-web-access": "^0.28.0"
   }
 }
