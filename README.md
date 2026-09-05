@@ -29,12 +29,12 @@ dev-plugin/
 
 ## 安装（每个工具一行命令）
 
-| 工具 | 命令 |
-|---|---|
-| Claude Code | `/plugin marketplace add jeryfan/dev-plugin` 然后 `/plugin install dev-plugin@jeryfan` |
-| Codex CLI | 在 `~/.agents/plugins/marketplace.json` 加入本仓库，或按 Codex 插件浏览器添加 |
-| Kimi Code | `/plugins install jeryfan/dev-plugin` |
-| pi | `pi install git:github.com/jeryfan/dev-plugin`（不带 ref，跟随默认分支，`pi update` 拉最新） |
+| 工具        | 命令                                                                                         |
+| ----------- | -------------------------------------------------------------------------------------------- |
+| Claude Code | `/plugin marketplace add jeryfan/dev-plugin` 然后 `/plugin install dev-plugin@jeryfan`       |
+| Codex CLI   | 在 `~/.agents/plugins/marketplace.json` 加入本仓库，或按 Codex 插件浏览器添加                |
+| Kimi Code   | `/plugins install jeryfan/dev-plugin`                                                        |
+| pi          | `pi install git:github.com/jeryfan/dev-plugin`（不带 ref，跟随默认分支，`pi update` 拉最新） |
 
 > 仓库推送到 GitHub 后上述命令即可使用；本地测试可用 `claude --plugin-dir ./dev-plugin` 或 pi 的本地路径安装 `pi install /path/to/dev-plugin`。
 
@@ -53,7 +53,12 @@ dev-plugin/
 新增第三方 skill：编辑 `skills.json`，格式：
 
 ```json
-{ "repo": "https://github.com/user/repo.git", "path": "skills", "include": ["a"], "exclude": ["b"] }
+{
+  "repo": "https://github.com/user/repo.git",
+  "path": "skills",
+  "include": ["a"],
+  "exclude": ["b"]
+}
 ```
 
 - `path`：skills 列表所在目录（默认根目录下的 `skills`，标准布局可省略），递归发现含 `SKILL.md` 的目录；同仓库有多个 skills 目录时可配置多条记录
@@ -71,7 +76,3 @@ dev-plugin/
 ### 版本号
 
 发版时统一更新 `.claude-plugin/plugin.json`、`.codex-plugin/plugin.json`、`kimi.plugin.json`、`package.json` 中的 `version`。
-
-## 与 pi-dev 的关系
-
-两者独立：pi-dev 是 pi 专用的开发环境包（extensions、全局 AGENTS.md、同步脚本）；本仓库是跨工具的通用 skills/MCP 插件包。
