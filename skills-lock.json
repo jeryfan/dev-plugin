@@ -70,5 +70,9 @@
   "grill-me": {
     "repo": "https://github.com/mattpocock/skills.git",
     "commit": "3cca18b"
+  },
+  "grilling": {
+    "repo": "https://github.com/mattpocock/skills.git",
+    "commit": "3cca18b"
   }
 }

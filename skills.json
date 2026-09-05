@@ -33,6 +33,6 @@
   {
     "repo": "https://github.com/mattpocock/skills.git",
     "path": "skills/productivity",
-    "include": ["grill-me"]
+    "include": ["grill-me", "grilling"]
   }
 ]
