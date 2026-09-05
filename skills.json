@@ -14,5 +14,25 @@
   {
     "repo": "https://github.com/microsoft/playwright-cli.git",
     "include": ["playwright-cli"]
+  },
+  {
+    "repo": "https://github.com/anthropics/skills.git",
+    "path": "skills",
+    "include": ["skill-creator", "mcp-builder"]
+  },
+  {
+    "repo": "https://github.com/addyosmani/agent-skills.git",
+    "path": "skills",
+    "include": ["test-driven-development", "code-review-and-quality", "debugging-and-error-recovery"]
+  },
+  {
+    "repo": "https://github.com/obra/superpowers.git",
+    "path": "skills",
+    "include": ["brainstorming", "writing-plans"]
+  },
+  {
+    "repo": "https://github.com/mattpocock/skills.git",
+    "path": "skills/productivity",
+    "include": ["grill-me"]
   }
 ]

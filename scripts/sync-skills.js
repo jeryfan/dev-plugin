@@ -28,7 +28,9 @@ fs.mkdirSync(backupDir, { recursive: true });
 fs.mkdirSync(reposDir, { recursive: true });
 
 const rmrf = (p) => fs.rmSync(p, { recursive: true, force: true });
-const repoKey = (repo) => path.basename(repo, ".git");
+// 用 owner/repo 两级目录做缓存路径，避免不同 owner 的同名仓库（如 anthropics/skills 与 mattpocock/skills）冲突
+const repoKey = (repo) =>
+  repo.replace(/\.git$/, "").split("/").slice(-2).join("/");
 
 /** 递归查找 dir 下所有含 SKILL.md 的目录 */
 function findSkillDirs(base) {
@@ -59,6 +61,7 @@ try {
       });
     } else {
       rmrf(clonedDir);
+      fs.mkdirSync(path.dirname(clonedDir), { recursive: true });
       execSync(`git clone --depth 1 ${entry.repo} "${clonedDir}"`, { stdio: "pipe" });
     }
 

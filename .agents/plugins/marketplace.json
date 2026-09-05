@@ -1,11 +1,20 @@
 {
+  "name": "jeryfan",
+  "interface": {
+    "displayName": "jeryfan"
+  },
   "plugins": [
     {
       "name": "dev-plugin",
       "source": {
+        "source": "local",
         "path": "./"
       },
-      "description": "Personal skills and MCP servers for daily development."
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
     }
   ]
 }

@@ -38,5 +38,37 @@
   "playwright-cli": {
     "repo": "https://github.com/microsoft/playwright-cli.git",
     "commit": "655530f"
+  },
+  "mcp-builder": {
+    "repo": "https://github.com/anthropics/skills.git",
+    "commit": "41bbe19"
+  },
+  "skill-creator": {
+    "repo": "https://github.com/anthropics/skills.git",
+    "commit": "41bbe19"
+  },
+  "code-review-and-quality": {
+    "repo": "https://github.com/addyosmani/agent-skills.git",
+    "commit": "84ee506"
+  },
+  "debugging-and-error-recovery": {
+    "repo": "https://github.com/addyosmani/agent-skills.git",
+    "commit": "84ee506"
+  },
+  "test-driven-development": {
+    "repo": "https://github.com/addyosmani/agent-skills.git",
+    "commit": "84ee506"
+  },
+  "brainstorming": {
+    "repo": "https://github.com/obra/superpowers.git",
+    "commit": "b36e082"
+  },
+  "writing-plans": {
+    "repo": "https://github.com/obra/superpowers.git",
+    "commit": "b36e082"
+  },
+  "grill-me": {
+    "repo": "https://github.com/mattpocock/skills.git",
+    "commit": "3cca18b"
   }
 }
