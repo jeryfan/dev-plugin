@@ -18,6 +18,7 @@ dev-plugin/
 │   └── marketplace.json         # Claude Code 个人插件市场
 ├── .codex-plugin/plugin.json    # Codex 清单
 ├── .agents/plugins/marketplace.json  # Codex 个人插件市场
+├── .agents/skills/                   # 元 skill（维护本仓库用，不随插件分发）
 ├── kimi.plugin.json             # Kimi 清单（mcpServers 由 sync 生成）
 ├── sources.json                 # 第三方资源拉取清单（skills / agents / prompts）
 ├── sources-lock.json            # vendor 的上游资源版本记录（sync 生成）
@@ -44,13 +45,15 @@ dev-plugin/
 
 在 `skills/<name>/SKILL.md` 创建，带 YAML frontmatter（`name`、`description`）。四个工具自动共享，无需改清单。
 
+流程规范见 `.agents/skills/add-custom-skill/SKILL.md`。**个人 skill 不会被 `npm run sync` 删除**——脚本只移除「`sources-lock.json` 里有记录、但本次清单已不含」的 vendor 资源，清单外的目录一律不动。
+
 ### 第三方资源（skills / agents / prompts）
 
 采用 vendor 模式：`scripts/sync-sources.js` 根据 **`sources.json` 清单**拉取上游最新资源到 `skills/`、`agents/`、`prompts/`。同步流程带备份回退：拉取前把将被覆盖的旧资源移到 `.cache/sources/`，全部成功才删除备份，任一失败则回退到同步前状态；上次 vendor 但本次清单不再包含的资源会被自动移除；**清单之外的目录视为个人资源，不做任何改动**。
 
 **发版前运行 `npm run sync` 并提交结果**，用户通过各工具的 update 命令（`pi update`、`/plugin update` 等）拿到最近一次同步的快照。上游版本记录在 `sources-lock.json`。
 
-新增第三方资源：编辑 `sources.json` 对应类型的数组，条目格式：
+新增第三方资源：按 `.agents/skills/add-external-skill/SKILL.md` 编辑 `sources.json` 对应类型的数组，条目格式：
 
 ```json
 {
