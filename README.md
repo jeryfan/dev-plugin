@@ -19,12 +19,12 @@ dev-plugin/
 ├── .codex-plugin/plugin.json    # Codex 清单
 ├── .agents/plugins/marketplace.json  # Codex 个人插件市场
 ├── kimi.plugin.json             # Kimi 清单（mcpServers 由 sync 生成）
-├── skills.json                  # 第三方 skill 拉取清单
-├── skills-lock.json             # vendor 的上游 skill 版本记录（sync 生成）
+├── sources.json                 # 第三方资源拉取清单（skills / agents / prompts）
+├── sources-lock.json            # vendor 的上游资源版本记录（sync 生成）
 ├── package.json                 # pi 清单（pi.extensions/skills/prompts 键）
 └── scripts/
     ├── sync-mcp.js              # MCP 配置同步
-    └── sync-skills.js           # 第三方 skill vendor 同步
+    └── sync-sources.js          # 第三方资源 vendor 同步（skills / agents / prompts）
 ```
 
 ## 安装（每个工具一行命令）
@@ -44,28 +44,27 @@ dev-plugin/
 
 在 `skills/<name>/SKILL.md` 创建，带 YAML frontmatter（`name`、`description`）。四个工具自动共享，无需改清单。
 
-### 第三方 skill
+### 第三方资源（skills / agents / prompts）
 
-采用 vendor 模式：`scripts/sync-skills.js` 根据 **`skills.json` 清单**拉取上游最新 skill 到 `skills/`。同步流程带备份回退：拉取前把将被覆盖的旧 skill 移到 `.cache/skills/`，全部成功才删除备份，任一失败则回退到同步前状态；上次 vendor 但本次清单不再包含的 skill 会被自动移除；**清单之外的 `skills/` 目录视为个人 skill，不做任何改动**。
+采用 vendor 模式：`scripts/sync-sources.js` 根据 **`sources.json` 清单**拉取上游最新资源到 `skills/`、`agents/`、`prompts/`。同步流程带备份回退：拉取前把将被覆盖的旧资源移到 `.cache/sources/`，全部成功才删除备份，任一失败则回退到同步前状态；上次 vendor 但本次清单不再包含的资源会被自动移除；**清单之外的目录视为个人资源，不做任何改动**。
 
-**发版前运行 `npm run sync` 并提交结果**，用户通过各工具的 update 命令（`pi update`、`/plugin update` 等）拿到最近一次同步的快照。上游版本记录在 `skills-lock.json`。
+**发版前运行 `npm run sync` 并提交结果**，用户通过各工具的 update 命令（`pi update`、`/plugin update` 等）拿到最近一次同步的快照。上游版本记录在 `sources-lock.json`。
 
-新增第三方 skill：编辑 `skills.json`，格式：
+新增第三方资源：编辑 `sources.json` 对应类型的数组，条目格式：
 
 ```json
 {
-  "repo": "https://github.com/user/repo.git",
-  "path": "skills",
-  "include": ["a"],
-  "exclude": ["b"]
+  "skills": [{ "repo": "https://github.com/user/repo.git", "path": "skills", "include": ["a"], "exclude": ["b"] }],
+  "agents": [],
+  "prompts": []
 }
 ```
 
-- `path`：skills 列表所在目录（默认根目录下的 `skills`，标准布局可省略），递归发现含 `SKILL.md` 的目录；同仓库有多个 skills 目录时可配置多条记录
-- `include`：只拉取列出的 skill 目录名；省略则全量
-- `exclude`：排除列出的 skill 目录名
+- `path`：资源所在目录（默认按类型：`skills` / `agents` / `prompts`），skills 递归发现含 `SKILL.md` 的目录，agents/prompts 递归发现 `.md` 文件；同仓库多个资源目录可配置多条；skills 的特殊值 `"."` 表示整个仓库即一个 skill
+- `include`：只拉取列出的资源名；省略则全量
+- `exclude`：排除列出的资源名
 
-同名 skill 冲突时后到者被跳过并告警。
+同名资源冲突时后到者被跳过并告警。
 
 ### 新增 MCP server
 

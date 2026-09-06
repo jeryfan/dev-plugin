@@ -1,0 +1,80 @@
+{
+  "skills": {
+    "banner-design": {
+      "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
+      "commit": "314307f"
+    },
+    "brand": {
+      "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
+      "commit": "314307f"
+    },
+    "design": {
+      "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
+      "commit": "314307f"
+    },
+    "design-system": {
+      "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
+      "commit": "314307f"
+    },
+    "slides": {
+      "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
+      "commit": "314307f"
+    },
+    "ui-styling": {
+      "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
+      "commit": "314307f"
+    },
+    "ui-ux-pro-max": {
+      "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
+      "commit": "314307f"
+    },
+    "frontend-design": {
+      "repo": "https://github.com/anthropics/claude-code.git",
+      "commit": "ab9b2cf"
+    },
+    "diagram-design": {
+      "repo": "https://github.com/cathrynlavery/diagram-design.git",
+      "commit": "4451ead"
+    },
+    "playwright-cli": {
+      "repo": "https://github.com/microsoft/playwright-cli.git",
+      "commit": "655530f"
+    },
+    "mcp-builder": {
+      "repo": "https://github.com/anthropics/skills.git",
+      "commit": "41bbe19"
+    },
+    "skill-creator": {
+      "repo": "https://github.com/anthropics/skills.git",
+      "commit": "41bbe19"
+    },
+    "code-review-and-quality": {
+      "repo": "https://github.com/addyosmani/agent-skills.git",
+      "commit": "469d00f"
+    },
+    "debugging-and-error-recovery": {
+      "repo": "https://github.com/addyosmani/agent-skills.git",
+      "commit": "469d00f"
+    },
+    "test-driven-development": {
+      "repo": "https://github.com/addyosmani/agent-skills.git",
+      "commit": "469d00f"
+    },
+    "brainstorming": {
+      "repo": "https://github.com/obra/superpowers.git",
+      "commit": "b36e082"
+    },
+    "writing-plans": {
+      "repo": "https://github.com/obra/superpowers.git",
+      "commit": "b36e082"
+    },
+    "grill-me": {
+      "repo": "https://github.com/mattpocock/skills.git",
+      "commit": "3cca18b"
+    },
+    "grilling": {
+      "repo": "https://github.com/mattpocock/skills.git",
+      "commit": "3cca18b"
+    }
+  }
+}
