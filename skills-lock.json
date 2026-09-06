@@ -1,35 +1,35 @@
 {
   "banner-design": {
     "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-    "commit": "f3ac195"
+    "commit": "b2ac9b2"
   },
   "brand": {
     "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-    "commit": "f3ac195"
+    "commit": "b2ac9b2"
   },
   "design": {
     "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-    "commit": "f3ac195"
+    "commit": "b2ac9b2"
   },
   "design-system": {
     "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-    "commit": "f3ac195"
+    "commit": "b2ac9b2"
   },
   "slides": {
     "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-    "commit": "f3ac195"
+    "commit": "b2ac9b2"
   },
   "ui-styling": {
     "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-    "commit": "f3ac195"
+    "commit": "b2ac9b2"
   },
   "ui-ux-pro-max": {
     "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-    "commit": "f3ac195"
+    "commit": "b2ac9b2"
   },
   "frontend-design": {
     "repo": "https://github.com/anthropics/claude-code.git",
-    "commit": "d7dbd9a"
+    "commit": "ab9b2cf"
   },
   "diagram-design": {
     "repo": "https://github.com/cathrynlavery/diagram-design.git",
@@ -49,15 +49,15 @@
   },
   "code-review-and-quality": {
     "repo": "https://github.com/addyosmani/agent-skills.git",
-    "commit": "84ee506"
+    "commit": "469d00f"
   },
   "debugging-and-error-recovery": {
     "repo": "https://github.com/addyosmani/agent-skills.git",
-    "commit": "84ee506"
+    "commit": "469d00f"
   },
   "test-driven-development": {
     "repo": "https://github.com/addyosmani/agent-skills.git",
-    "commit": "84ee506"
+    "commit": "469d00f"
   },
   "brainstorming": {
     "repo": "https://github.com/obra/superpowers.git",

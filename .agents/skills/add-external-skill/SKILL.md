@@ -18,7 +18,7 @@ description: Add a third-party skill repo to dev-plugin's skills.json manifest a
 | 字段 | 必填 | 说明 |
 |---|---|---|
 | `repo` | 是 | git 仓库 URL |
-| `path` | 否 | skills 列表所在目录（其下每个含 `SKILL.md` 的子目录即一个 skill）。列表目录名不一定叫 `skills`；省略时默认根目录下的 `skills/`（标准布局） |
+| `path` | 否 | skills 列表所在目录（其下每个含 `SKILL.md` 的子目录即一个 skill）。列表目录名不一定叫 `skills`；省略时默认根目录下的 `skills/`（标准布局）。特殊值 `"."`：整个仓库即一个 skill（`SKILL.md` 在仓库根目录），skill 名取仓库名 |
 | `include` | 否 | 只拉取列出的 skill 目录名；省略则全量 |
 | `exclude` | 否 | 排除列出的 skill 目录名，在 include 之后生效 |
 

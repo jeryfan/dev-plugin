@@ -2,7 +2,8 @@
 /**
  * 根据 skills.json 从第三方 git 仓库 vendor skill 到 skills/，带备份回退。
  * 清单格式：{ repo, path?, include?, exclude? }
- *   - path：skills 列表所在目录（默认根目录下的 skills），递归发现含 SKILL.md 的目录；同仓库多个 skills 目录可配置多条
+ *   - path：skills 列表所在目录（默认根目录下的 skills），递归发现含 SKILL.md 的子目录；同仓库多个 skills 目录可配置多条
+ *     特殊值 "."：整个仓库即一个 skill（SKILL.md 在仓库根目录），skill 名取仓库名
  *   - include：只拉取列出的 skill 目录名；省略则全量
  *   - exclude：排除列出的 skill 目录名
  * 清单之外的 skills/ 目录不改动。
@@ -34,8 +35,6 @@ const repoKey = (repo) =>
 
 /** 递归查找 dir 下所有含 SKILL.md 的目录 */
 function findSkillDirs(base) {
-  // path 自身就是 skill（单 skill 仓库，SKILL.md 在根目录）时直接返回
-  if (fs.existsSync(path.join(base, "SKILL.md"))) return [base];
   const found = [];
   (function walk(dir) {
     for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -72,6 +71,20 @@ try {
 
     if (!fs.existsSync(scanRoot)) {
       throw new Error(`${entry.repo}: 目录不存在 ${entry.path || "skills"}`);
+    }
+
+    // path 为 "." 时整个仓库即一个 skill（SKILL.md 在仓库根目录），skill 名取仓库名
+    if (entry.path === ".") {
+      if (!fs.existsSync(path.join(clonedDir, "SKILL.md"))) {
+        throw new Error(`${entry.repo}: path 为 "."，但仓库根目录没有 SKILL.md`);
+      }
+      const name = path.basename(clonedDir);
+      if (planned.some((p) => p.name === name)) {
+        console.error(`[sync-skills] 跳过重名 skill: ${name}（${entry.repo}）`);
+        continue;
+      }
+      planned.push({ name, source: clonedDir, repo: entry.repo, commit });
+      continue;
     }
 
     for (const skillPath of findSkillDirs(scanRoot)) {
