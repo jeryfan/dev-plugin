@@ -34,6 +34,8 @@ const repoKey = (repo) =>
 
 /** 递归查找 dir 下所有含 SKILL.md 的目录 */
 function findSkillDirs(base) {
+  // path 自身就是 skill（单 skill 仓库，SKILL.md 在根目录）时直接返回
+  if (fs.existsSync(path.join(base, "SKILL.md"))) return [base];
   const found = [];
   (function walk(dir) {
     for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -117,7 +119,11 @@ for (const p of planned) {
 
 try {
   for (const p of planned) {
-    fs.cpSync(p.source, path.join(skillsDir, p.name), { recursive: true });
+    // filter 排除 .git（path 指向仓库根时 source 含 .git）
+    fs.cpSync(p.source, path.join(skillsDir, p.name), {
+      recursive: true,
+      filter: (src) => !src.split(path.sep).includes(".git"),
+    });
     console.log(`[sync-skills] ${p.name} @ ${p.commit} → skills/${p.name}`);
   }
 } catch (err) {
