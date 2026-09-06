@@ -1,6 +1,6 @@
 {
   "name": "dev-plugin",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Personal cross-tool agent plugin: skills and MCP servers for Claude Code, Codex, Kimi Code and pi.",
   "keywords": [
     "personal",
