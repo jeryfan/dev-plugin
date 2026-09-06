@@ -76,5 +76,11 @@
       "repo": "https://github.com/mattpocock/skills.git",
       "commit": "3cca18b"
     }
+  },
+  "agents": {
+    "code-reviewer": {
+      "repo": "https://github.com/VoltAgent/awesome-claude-code-subagents.git",
+      "commit": "beb9a0f"
+    }
   }
 }
