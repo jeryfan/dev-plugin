@@ -1,0 +1,24 @@
+[project]
+name = "db-skill"
+version = "0.1.0"
+description = "db skill：连库查数、表结构缓存、导出、写操作（MySQL / PostgreSQL / SQLite / MongoDB）"
+requires-python = ">=3.13"
+dependencies = [
+    "pymysql>=1.1",
+    "psycopg[binary]>=3.2",
+    "pymongo>=4.9",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.8",
+]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "RUF"]
+# RUF001/002/003 把中文文案里的全角标点当易混淆字符，中文项目不适用
+ignore = ["RUF001", "RUF002", "RUF003"]

@@ -1,0 +1,34 @@
+{
+  "default": "local",
+
+  "connections": {
+    "local": {
+      "type": "mysql",
+      "host": "127.0.0.1",
+      "port": 3306,
+      "user": "root",
+      "password_env": "MYSQL_PW",
+      "database": "fastapi"
+    },
+    "pg_local": {
+      "type": "postgresql",
+      "host": "127.0.0.1",
+      "port": 5432,
+      "user": "postgres",
+      "password_env": "PG_PW",
+      "database": "app"
+    },
+    "mongo_local": {
+      "type": "mongodb",
+      "host": "127.0.0.1",
+      "port": 27017,
+      "user": "",
+      "password_env": "MONGO_PW",
+      "database": "test"
+    },
+    "sqlite_local": {
+      "type": "sqlite",
+      "database": "/absolute/path/to/app.db"
+    }
+  }
+}

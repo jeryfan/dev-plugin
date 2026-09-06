@@ -1,0 +1,20 @@
+# ---- 本地连接配置（含账号密码），不进仓库 ----
+config.json
+config.local.json
+
+# ---- 元数据缓存：由 scripts/sync.py 重新生成 ----
+# 如需提交某个库的 schema，用 git add -f metadata/<host>/<db>
+metadata/
+
+# ---- uv 虚拟环境，不进仓库 ----
+.venv/
+
+# ---- 任何临时/测试产物都不允许落在本目录 ----
+_tmp/
+tmp/
+*.tmp
+*.bak
+*.log
+__pycache__/
+*.py[cod]
+.DS_Store
