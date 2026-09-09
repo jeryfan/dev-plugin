@@ -13,6 +13,17 @@
 - `sources.json`：第三方资源拉取清单（手工维护，含 skills / agents / prompts / commands / plugins 五类；plugins 为整个插件仓库，按约定目录自动拆解）
 - `sources-lock.json`：vendor 版本锁定记录（脚本生成，不要手改）
 
+## 用户数据位置
+
+skill 目录只放**只读代码**（会被插件更新整体覆盖）；用户态数据统一外置，每个 skill 一个目录，四个 agent 共用一份：
+
+| 默认位置 | 含义 | 覆盖变量 |
+|---|---|---|
+| `~/.dev-plugin/<skill>/config.json` | 配置（手写） | `<SKILL>_CONFIG`（指向文件） |
+| `~/.dev-plugin/<skill>/metadata/`（或该 skill 自定义子目录） | 数据 / 缓存 | `<SKILL>_HOME`（整个目录换位） |
+
+config 和缓存收在同一目录，备份/迁移/卸载对着一个目录操作。新增个人 skill 要持久化状态时照这套来，别写回 `skills/<name>/`。参考实现：`skills/db/scripts/_common.py` 的 `skill_state_dir()`。
+
 ## 同步规则
 
 ```bash

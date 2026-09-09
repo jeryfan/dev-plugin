@@ -5,15 +5,21 @@
  * sources.json 格式：{ "skills": [...], "agents": [...], "prompts": [...], "commands": [...], "plugins": [...] }，每类是条目数组：
  *   { repo, path?, include?, exclude?, capabilities? }
  *   - repo：git 仓库 URL
- *   - path：资源所在目录，省略时按类型取默认（与类型同名）
+ *   - path：资源所在目录，省略时按类型取默认（与类型同名）；plugins 不支持（写进 capabilities 条目）
  *     skills 特殊值 "."：整个仓库即一个 skill（SKILL.md 在仓库根目录），skill 名取仓库名
- *   - include：只拉取列出的资源名；省略则全量
- *   - exclude：排除列出的资源名
- *   - capabilities（仅 plugins）：限定拆解的能力，默认全部
+ *   - include：只拉取列出的资源名；省略则全量；plugins 不支持（写进 capabilities 条目）
+ *   - exclude：排除列出的资源名；plugins 不支持（同上）
+ *   - capabilities（仅 plugins）：与顶层清单同构的字典（只是没有 plugins 键），键为能力名，值为条目数组
+ *       { "skills": [{ "path": "custom-dir", "include": [...], "exclude": [...] }], "commands": true }
+ *       - 键固定为 skills / agents / commands / prompts，写错会被跳过并告警
+ *       - 条目字段 path / include / exclude 与顶层一致（path 相对仓库根，默认与能力同名；没有 repo 字段）
+ *       - 同一能力可写多条条目，用于插件内资源散落在不同目录；跨条目的同名资源只取第一条
+ *       - true / {} / []：按约定目录全量拆解
+ *       - 省略整个 capabilities 表示拆解全部能力
  * 资源名：skill 为含 SKILL.md 的目录名；agents/prompts 为 .md 文件名（去后缀）；
  * commands 为 .md / .toml 文件名（去后缀，.toml 提取 description/prompt 转 .md）。
  * plugins 类型：第三方插件仓库，按约定目录自动拆解落地——
- *   skills/（含 SKILL.md 的目录）→ skills，agents/（.md）→ agents，commands/ → commands。
+ *   skills/（含 SKILL.md 的目录）→ skills，agents/（.md）→ agents，commands/ → commands，prompts/（.md）→ prompts。
  *   hooks / mcp / extensions 涉及执行代码与环境配置，不做自动拆解。
  * 清单之外的目录（个人资源）不动；上次 vendor 但本次清单不再包含的会被自动移除（依据 sources-lock.json）。
  */
@@ -130,31 +136,78 @@ const PLUGIN_CAPS = {
   skills: "skills",
   agents: "agents",
   commands: "commands",
+  prompts: "prompts",
 };
 
-/** 拆解第三方插件仓库：按约定目录 skills/ agents/ commands/ 收集资源 */
+const CAP_KEYS = Object.keys(PLUGIN_CAPS);
+
+/** 归一化 capabilities：省略 / 对象 → { 能力: 条目数组 }（与顶层清单同构，条目只含 path/include/exclude） */
+function normalizeCaps(entry) {
+  const raw = entry.capabilities;
+  if (raw === undefined || raw === null) {
+    return Object.fromEntries(CAP_KEYS.map((k) => [k, [{}]]));
+  }
+  if (typeof raw !== "object" || Array.isArray(raw)) {
+    throw new Error(`${entry.repo}: capabilities 必须是对象（{ "skills": [...], ... }），收到 ${Array.isArray(raw) ? "数组" : typeof raw}`);
+  }
+  const out = {};
+  for (const [cap, value] of Object.entries(raw)) {
+    // true / {}：全量默认目录；对象或数组：一条或多条条目
+    const list = value === true || value === undefined || value === null
+      ? [{}]
+      : Array.isArray(value) ? (value.length ? value : [{}]) : [value];
+    out[cap] = list.map((item) => {
+      const spec = item === true || item === undefined || item === null ? {} : item;
+      if (typeof spec !== "object" || Array.isArray(spec)) {
+        throw new Error(`${entry.repo}: capabilities.${cap} 的条目必须是对象（path / include / exclude）或 true`);
+      }
+      return spec;
+    });
+  }
+  return out;
+}
+
+/** 按目标类型收集 dir 下的资源，通过 add 登记（skills 取目录，其余取 .md / .toml 文件） */
+function collectByType(targetType, dir, add) {
+  if (targetType === "skills") {
+    for (const d of findSkillDirs(dir)) add("skills", path.basename(d), d);
+  } else if (targetType === "commands") {
+    collectCommands(add, "commands", dir);
+  } else {
+    for (const f of findMdFiles(dir)) add(targetType, path.basename(f, ".md"), f);
+  }
+}
+
+/** 拆解第三方插件仓库：按 capabilities 声明的能力目录收集资源 */
 function collectPlugin(entry, clonedDir, tryAdd) {
-  const caps = entry.capabilities || Object.keys(PLUGIN_CAPS);
+  if (entry.path || entry.include || entry.exclude) {
+    console.error(`[sync-sources] ${entry.repo}: plugins 只支持 repo + capabilities；path / include / exclude 写到 capabilities.<能力> 的条目里（path 相对仓库根）`);
+  }
+  // 省略 capabilities 表示「有什么拆什么」，缺目录属正常；显式声明了才值得告警
+  const explicit = entry.capabilities !== undefined && entry.capabilities !== null;
   let scanned = false;
-  for (const cap of caps) {
+  for (const [cap, specs] of Object.entries(normalizeCaps(entry))) {
     const target = PLUGIN_CAPS[cap];
     if (!target) {
-      console.error(`[sync-sources] 跳过不支持的插件能力 ${cap}（${entry.repo}），仅自动拆解: ${Object.keys(PLUGIN_CAPS).join(" / ")}`);
+      console.error(`[sync-sources] 跳过不支持的插件能力 ${cap}（${entry.repo}），仅支持: ${CAP_KEYS.join(" / ")}`);
       continue;
     }
-    const dir = path.join(clonedDir, cap);
-    if (!fs.existsSync(dir)) continue;
-    scanned = true;
-    if (cap === "skills") {
-      for (const d of findSkillDirs(dir)) tryAdd("skills", path.basename(d), d);
-    } else if (cap === "agents") {
-      for (const f of findMdFiles(dir)) tryAdd("agents", path.basename(f, ".md"), f);
-    } else {
-      collectCommands(tryAdd, "commands", dir);
+    for (const spec of specs) {
+      const dir = path.join(clonedDir, spec.path || cap);
+      if (!fs.existsSync(dir)) {
+        if (explicit) {
+          console.error(`[sync-sources] ${entry.repo}: capabilities.${cap} 声明了 ${spec.path || cap}，但目录不存在`);
+        }
+        continue;
+      }
+      scanned = true;
+      const filters = { include: spec.include, exclude: spec.exclude };
+      collectByType(target, dir, (type, name, source, extra = {}) =>
+        tryAdd(type, name, source, { ...extra, filters }));
     }
   }
   if (!scanned) {
-    throw new Error(`${entry.repo}: 未找到约定资源目录（${Object.keys(PLUGIN_CAPS).join(" / ")}），无法作为插件拆解`);
+    throw new Error(`${entry.repo}: 未找到任何声明的能力目录（${CAP_KEYS.join(" / ")}），无法作为插件拆解`);
   }
 }
 
@@ -167,7 +220,7 @@ const TYPES = {
 };
 
 if (typeof manifest !== "object" || manifest === null || Array.isArray(manifest)) {
-  console.error("[sync-sources] sources.json 必须是对象，键为 skills / agents / prompts");
+  console.error("[sync-sources] sources.json 必须是对象，键为 skills / agents / prompts / commands / plugins");
   process.exit(1);
 }
 for (const key of Object.keys(manifest)) {
@@ -205,13 +258,14 @@ try {
       const { clonedDir, commit } = checkout(entry.repo);
 
       const tryAdd = (type, name, source, extra = {}) => {
-        if (entry.include && !entry.include.includes(name)) return;
-        if (entry.exclude && entry.exclude.includes(name)) return;
+        const { filters = {}, ...rest } = extra;
+        if (filters.include && !filters.include.includes(name)) return;
+        if (filters.exclude && filters.exclude.includes(name)) return;
         if (planned.some((p) => p.type === type && p.name === name)) {
           console.error(`[sync-sources] 跳过重名 ${type}: ${name}（${entry.repo}）`);
           return;
         }
-        planned.push({ type, name, source, repo: entry.repo, commit, ...extra });
+        planned.push({ type, name, source, repo: entry.repo, commit, ...rest });
       };
 
       if (type === "plugins") {
@@ -235,13 +289,9 @@ try {
         continue;
       }
 
-      if (cfg.isDir) {
-        for (const dir of findSkillDirs(scanRoot)) tryAdd(type, path.basename(dir), dir);
-      } else if (type === "commands") {
-        collectCommands(tryAdd, "commands", scanRoot);
-      } else {
-        for (const file of findMdFiles(scanRoot)) tryAdd(type, path.basename(file, ".md"), file);
-      }
+      const filters = { include: entry.include, exclude: entry.exclude };
+      collectByType(type, scanRoot, (t, name, source, extra = {}) =>
+        tryAdd(t, name, source, { ...extra, filters }));
     }
   }
 } catch (err) {
@@ -272,7 +322,8 @@ for (const [type, locked] of Object.entries(oldLock)) {
   }
 }
 
-// 备份将被覆盖的同名资源，失败时回退
+// 备份将被覆盖的同名资源，失败时回退。先清空备份区，避免上次中断留下的残骸让 rename 失败
+rmrf(backupDir);
 const backedUp = [];
 for (const p of planned) {
   const target = targetPath(p);

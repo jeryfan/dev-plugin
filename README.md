@@ -147,18 +147,21 @@ pi install /absolute/path/to/dev-plugin
   "plugins": [
     {
       "repo": "https://github.com/user/some-plugin.git",
-      "capabilities": ["skills", "commands"]
+      "capabilities": {
+        "skills": [{ "path": "skills", "include": ["a"] }, { "path": "legacy/skills" }],
+        "commands": true
+      }
     }
   ]
 }
 ```
 
-- `path`：资源所在目录（默认按类型：`skills` / `agents` / `prompts` / `commands`），skills 递归发现含 `SKILL.md` 的目录，agents/prompts 递归发现 `.md` 文件，commands 递归发现 `.md` 与 `.toml` 文件（`.toml` 提取 `description` + `prompt` 转成带 frontmatter 的 `.md`）；同仓库多个资源目录可配置多条；skills 的特殊值 `"."` 表示整个仓库即一个 skill
+- `path`：资源所在目录（默认按类型：`skills` / `agents` / `prompts` / `commands`），skills 递归发现含 `SKILL.md` 的目录，agents/prompts 递归发现 `.md` 文件，commands 递归发现 `.md` 与 `.toml` 文件（`.toml` 提取 `description` + `prompt` 转成带 frontmatter 的 `.md`）；同仓库多个资源目录可配置多条；skills 的特殊值 `"."` 表示整个仓库即一个 skill；plugins 条目不支持 `path` / `include` / `exclude`（写到 `capabilities` 的条目里，相对仓库根）
 - `include`：只拉取列出的资源名；省略则全量
 - `exclude`：排除列出的资源名
-- `capabilities`（仅 plugins）：限定拆解的能力，子集 of `["skills", "agents", "commands"]`，默认全部
+- `capabilities`（仅 plugins）：与顶层清单同构的字典，键为能力名（`skills` / `agents` / `commands` / `prompts`），值为条目数组，条目字段与顶层一致（`path` / `include` / `exclude`，无 `repo`）；`true` 表示按约定目录全量拆解，同一能力可写多条条目，省略则拆解全部能力
 
-**plugins 类型**用于整个第三方插件仓库：按约定目录自动拆解——`skills/` → `skills/`、`agents/` → `agents/`、`commands/` → `commands/`。hooks / mcp / extensions 涉及自动执行代码与环境配置，**不做自动拆解**（需要 MCP 时手工评估后加进 `.mcp.json`）；插件至少需存在上述一个约定目录，否则同步报错。
+**plugins 类型**用于整个第三方插件仓库：按约定目录自动拆解——`skills/` → `skills/`、`agents/` → `agents/`、`commands/` → `commands/`、`prompts/` → `prompts/`。hooks / mcp / extensions 涉及自动执行代码与环境配置，**不做自动拆解**（需要 MCP 时手工评估后加进 `.mcp.json`）；插件至少需命中一个能力目录，否则同步报错。
 
 同名资源冲突时后到者被跳过并告警。
 

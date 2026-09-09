@@ -9,7 +9,7 @@ scripts/ 下的脚本 import 它；一次性脚本从临时目录只读 import�
     from _common import connect, print_rows
 
 命令行：
-    python3 _common.py --doctor     检查配置与驱动
+    python3 _common.py --doctor     检查配置与驱动（含配置/缓存路径及来源）
     python3 _common.py --tmp-dir    建一个临时目录（给一次性脚本用）
 """
 
@@ -25,7 +25,9 @@ from datetime import datetime
 from pathlib import Path
 
 SKILL_DIR = Path(__file__).resolve().parent.parent
-CONFIG_ENV = "DB_SKILL_CONFIG"
+SKILL_NAME = "db"
+HOME_ENV = "DB_SKILL_HOME"          # 整个状态目录（config + metadata 都在里面）
+CONFIG_ENV = "DB_SKILL_CONFIG"      # 单个配置文件覆盖（逃生口）
 MAX_ROWS = 200  # q.py 默认打印上限
 
 SYSTEM_DBS = {
@@ -61,9 +63,33 @@ def run_cli(main_fn) -> None:
 
 # ------------------------------------------------------------------ 配置
 
+def skill_state_dir() -> Path:
+    """本 skill 的状态目录（config + metadata 收在一处）：DB_SKILL_HOME > ~/.dev-plugin/db。"""
+    env = os.environ.get(HOME_ENV, "").strip()
+    if env:
+        return Path(os.path.expandvars(env)).expanduser()
+    return Path.home() / ".dev-plugin" / SKILL_NAME
+
+
+def legacy_config_path() -> Path:
+    """旧位置（skill 目录下），只为迁移期兼容保留。"""
+    # ponytail: 迁移期兼容，确认用户都迁完后删（含 load_config 的告警和 _path_source 的分支）
+    return SKILL_DIR / "config.json"
+
+
 def config_path() -> Path:
-    env = os.environ.get(CONFIG_ENV)
-    return Path(os.path.expandvars(env)).expanduser() if env else SKILL_DIR / "config.json"
+    """查找顺序：DB_SKILL_CONFIG > ~/.dev-plugin/db/config.json > skill 目录（旧位置）。
+
+    多个 agent 各装一份 skill 副本，但配置只有这一份，所以默认位置与安装路径无关。
+    """
+    env = os.environ.get(CONFIG_ENV, "").strip()
+    if env:
+        return Path(os.path.expandvars(env)).expanduser()
+    user = skill_state_dir() / "config.json"
+    if user.exists():
+        return user
+    legacy = legacy_config_path()
+    return legacy if legacy.exists() else user
 
 
 def _expand_env(obj):
@@ -80,8 +106,15 @@ def load_config() -> dict:
     path = config_path()
     if not path.exists():
         raise DbSkillError(
-            "缺少配置文件 {}\n  复制模板后填写连接信息: cp {} {}".format(
-                path, SKILL_DIR / "config.example.json", path))
+            "缺少配置文件 {}\n  建目录并复制模板后填写连接信息:\n"
+            "    mkdir -p {} && cp {} {}".format(
+                path, path.parent, SKILL_DIR / "config.example.json", path))
+    if path == legacy_config_path():
+        sys.stderr.write(
+            "db: 警告：还在用 skill 目录下的旧配置 {}（插件更新会丢）\n"
+            "    迁移: mkdir -p {} && mv {} {}\n".format(
+                path, skill_state_dir(), path,
+                skill_state_dir() / "config.json"))
     try:
         cfg = json.loads(path.read_text(encoding="utf-8"))
     except Exception as e:
@@ -123,14 +156,20 @@ def host_dir(c: dict, typ: str = "") -> str:
 
 
 def metadata_root(cfg: dict | None = None) -> Path:
+    """表结构缓存目录：config.metadata_dir > ~/.dev-plugin/db/metadata。
+
+    metadata_dir 写相对路径时，基准是状态目录（skill_state_dir），不是 skill 目录。
+    """
     if cfg is None:
         try:
             cfg = load_config()
         except DbSkillError:
             cfg = {}
-    d = str((cfg.get("metadata_dir") or "metadata"))
+    d = str(cfg.get("metadata_dir") or "").strip()
+    if not d:
+        return skill_state_dir() / "metadata"
     p = Path(os.path.expandvars(d)).expanduser()
-    return p if p.is_absolute() else (SKILL_DIR / p)
+    return p if p.is_absolute() else (skill_state_dir() / p)
 
 
 def table_md_path(cfg, host: str, database: str, table_dir: str) -> Path:
@@ -163,8 +202,9 @@ def guard_writable(path, allow_metadata: bool = False) -> Path:
             return p
     raise DbSkillError(
         "禁止写入 skill 目录: {}\n"
-        "  skill 目录只允许两类写入：metadata/（仅 sync.py）和 config.json（手工维护）\n"
-        "  请把 -o 指到项目目录或 {}/ 下".format(p, tempfile.gettempdir()))
+        "  skill 目录是只读代码（状态目录在 {}，含 config.json 和 metadata/）\n"
+        "  请把 -o 指到项目目录或 {}/ 下".format(
+            p, skill_state_dir(), tempfile.gettempdir()))
 
 
 def _comparable(text: str) -> str:
@@ -620,15 +660,37 @@ def connect(name: str | None = None, database: str | None = None,
 
 # ------------------------------------------------------------------ CLI
 
+def _path_source(env: str | None = None, legacy: bool = False,
+                 from_cfg: bool = False) -> str:
+    """路径来源标注，按实际生效的优先级逐个判断。"""
+    if env and os.environ.get(env, "").strip():
+        return "来源 {}".format(env)
+    if legacy:
+        return "来源旧位置，建议迁移到 {}".format(skill_state_dir())
+    if from_cfg:
+        return "来源 config.metadata_dir"
+    if os.environ.get(HOME_ENV, "").strip():
+        return "来源 DB_SKILL_HOME"
+    return "来源默认位置"
+
+
 def _doctor() -> int:
+    cfg_path = config_path()
     print("skill 目录: {}".format(SKILL_DIR))
-    print("配置文件:   {}".format(config_path()))
+    print("配置文件:   {}  ({})".format(
+        cfg_path, _path_source(CONFIG_ENV, legacy=cfg_path == legacy_config_path())))
     try:
         cfg = load_config()
         print("配置解析:   OK")
     except DbSkillError as e:
-        print("配置解析:   失败 -> {}".format(str(e).splitlines()[0]))
+        print("配置解析:   失败 ->")
+        for line in str(e).splitlines():
+            print("             " + line)
         return 1
+    plain = [n for n, c in cfg["connections"].items() if c.get("password")]
+    if plain and cfg_path.exists() and (cfg_path.stat().st_mode & 0o077):
+        print("权限告警:   {} 写了明文密码且他人可读，建议 chmod 600（连接: {}）".format(
+            cfg_path, ", ".join(plain)))
     ok = True
     for name in cfg["connections"]:
         c = get_connection_cfg(cfg, name)
@@ -650,7 +712,9 @@ def _doctor() -> int:
             state = "OK ({})".format("/".join(found)) if found else "缺少驱动，装: {}".format(hint)
             ok = ok and bool(found)
         print("  连接 {:<12} type={:<12} {}".format(name, typ, state))
-    print("元数据目录: {}".format(metadata_root(cfg)))
+    print("元数据目录: {}  ({})".format(
+        metadata_root(cfg),
+        _path_source(from_cfg=bool(str(cfg.get("metadata_dir") or "").strip()))))
     return 0 if ok else 1
 
 

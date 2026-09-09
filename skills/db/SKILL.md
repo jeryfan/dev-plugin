@@ -11,11 +11,34 @@ description: 数据库查询与表结构助手。用户要连库查数、看表�
 
 ```bash
 uv sync                              # 装齐 Python 3.13 + 全部驱动（pymysql / psycopg / pymongo）
-cp config.example.json config.json   # 留一个连接、删掉其余的，填上 host/user/database
-export MYSQL_PW='...'                # 密码走环境变量，别写进 config.json
+mkdir -p ~/.dev-plugin/db
+cp config.example.json ~/.dev-plugin/db/config.json
+export MYSQL_PW='...'                # 密码走环境变量，别写进配置文件
 ```
 
-然后 `uv run scripts/sync.py` 把表结构缓存下来。想确认配置对不对：`uv run scripts/_common.py --doctor`。
+四个 agent 各装一份 skill 副本，但**状态只有一份**（都在 `~/.dev-plugin/db/`），装一次到处能用。路径规则见下节。
+
+然后 `uv run scripts/sync.py` 把表结构缓存下来。想确认配置对不对、路径落在哪：`uv run scripts/_common.py --doctor`。
+
+## 状态目录：~/.dev-plugin/db/
+
+配置和缓存收在同一处，备份、迁移、卸载都对着这一个目录操作：
+
+```text
+~/.dev-plugin/
+└── db/                     本 skill 全部状态
+    ├── config.json         连接配置（手写）
+    └── metadata/           表结构缓存（sync.py 自动生成）
+```
+
+| 覆盖方式 | 作用 |
+|---|---|
+| `DB_SKILL_HOME=/path` | 整个 `db/` 状态目录换位（config + metadata 一起走） |
+| `DB_SKILL_CONFIG=/path/file.json` | 只换配置文件（逃生口） |
+| config 里的 `metadata_dir` | 只换缓存目录；相对路径时以状态目录为基准 |
+
+- 以后每个个人 skill 各占 `~/.dev-plugin/<skill>/` 一个目录，同构管理
+- 旧版把 config 放在 skill 目录下：`--doctor` 会打印迁移命令，兼容读取但会告警
 
 所有脚本都用 `uv run` 执行（首次或依赖变更时会自动同步环境，不用手动再跑 `uv sync`）。命令都假设当前目录是 `skills/db/`；在别的目录执行用 `uv run --project <skills/db路径> scripts/q.py ...`。
 
@@ -56,11 +79,11 @@ Mongo 没有固定 schema，`sync.py` 按 100 个采样文档推断字段类型�
 | `alias` | 改 `metadata/` 下一级目录名（同一主机多账号时用） |
 | `schemas` | PostgreSQL 的 schema 列表，默认 `["public"]` |
 | `options` | 透传给驱动，如 `{"sslmode": "require"}` |
-| `metadata_dir` | 缓存目录，默认 `metadata` |
+| `metadata_dir` | 缓存目录，默认 `~/.dev-plugin/db/metadata` |
 
 ## 边界：别把 skill 目录弄脏
 
-`skills/db/` 里只允许这些写入：`metadata/`（只有 `sync.py` 写）、`config.json`（你手工改）、`.venv/` 和 `uv.lock`（只有 `uv` 写）。
+`skills/db/` 是只读代码：状态（config.json + metadata/）都在 `~/.dev-plugin/db/` 下，目录内只有 `.venv/` 和 `uv.lock` 由 `uv` 写。任何输出落到 skill 目录都会被 `_common.guard_writable()` 拒绝。
 
 - 不在 `skills/db/` 下建临时脚本、测试脚本、导出文件、日志
 - `-o` 指向项目目录或 `/tmp`；指到 skill 目录会被 `_common.guard_writable()` 直接拒绝
@@ -87,7 +110,9 @@ uv run "$TMP/adhoc.py"                            # uv run 跑项目外的脚本
 
 | 提示 | 怎么办 |
 |---|---|
-| 缺少配置文件 | `cp config.example.json config.json` |
+| 缺少配置文件 | `mkdir -p ~/.dev-plugin/db && cp config.example.json ~/.dev-plugin/db/config.json` |
+| 配置在哪/缓存到哪 | `uv run scripts/_common.py --doctor`（输出含路径和来源） |
+| 还在用旧位置的配置 | 按 `--doctor` 打印的 `mv` 命令迁移到 `~/.dev-plugin/db/config.json` |
 | 需要环境变量 XXX 提供密码 | `export XXX='...'` |
 | 缺少驱动 | `uv sync`（驱动全部声明在 pyproject.toml） |
 | 没找到 … 的缓存 | 先跑 `uv run scripts/sync.py` |
