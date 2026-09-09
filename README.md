@@ -4,7 +4,7 @@
 
 ## 原理
 
-本仓库以 `skills/` 作为跨工具共享核心。各工具对 MCP、agents、extensions、prompts 和安装生命周期的支持不同，因此这些资源并非全部等价分发：
+本仓库以 `skills/` 作为跨工具共享核心。各工具对 MCP、agents、extensions、prompts、commands 和安装生命周期的支持不同，因此这些资源并非全部等价分发：
 
 ```
 dev-plugin/
@@ -12,6 +12,7 @@ dev-plugin/
 ├── agents/                           # vendor agents
 ├── extensions/                       # pi 扩展
 ├── prompts/                          # pi prompts；当前无自有 prompt
+├── commands/                         # 斜杠命令（Claude / Kimi / pi；Codex 插件不支持）
 ├── AGENTS.md                         # 仓库维护说明
 ├── .pi/AGENTS.md                     # 安装时复制给 pi 的全局说明
 ├── .mcp.json                         # MCP 唯一数据源
@@ -122,9 +123,9 @@ pi install /absolute/path/to/dev-plugin
 
 流程规范见 `.agents/skills/add-custom-skill/SKILL.md`。**个人 skill 不会被 `npm run sync` 删除**——脚本只移除「`sources-lock.json` 里有记录、但本次清单已不含」的 vendor 资源，清单外的目录一律不动。
 
-### 第三方资源（skills / agents / prompts）
+### 第三方资源（skills / agents / prompts / commands / plugins）
 
-采用 vendor 模式：`scripts/sync-sources.js` 根据 **`sources.json` 清单**拉取上游最新资源到 `skills/`、`agents/`、`prompts/`。同步流程带备份回退：拉取前把将被覆盖的旧资源移到 `.cache/sources/`，全部成功才删除备份，任一失败则回退到同步前状态；上次 vendor 但本次清单不再包含的资源会被自动移除；**清单之外的目录视为个人资源，不做任何改动**。
+采用 vendor 模式：`scripts/sync-sources.js` 根据 **`sources.json` 清单**拉取上游最新资源到 `skills/`、`agents/`、`prompts/`、`commands/`。同步流程带备份回退：拉取前把将被覆盖的旧资源移到 `.cache/sources/`，全部成功才删除备份，任一失败则回退到同步前状态；上次 vendor 但本次清单不再包含的资源会被自动移除；**清单之外的目录视为个人资源，不做任何改动**。
 
 **发版前运行 `npm run sync` 并提交生成的 skills、agents、Kimi MCP 清单和 `sources-lock.json`**。各客户端需使用上文各自的插件/package 更新命令。vendor skills 和 agents 是发版时提交的快照；`.mcp.json` 中的 `chrome-devtools-mcp@latest` 则在实际运行时解析 npm 最新版本，不受插件版本固定。
 
@@ -141,13 +142,23 @@ pi install /absolute/path/to/dev-plugin
     }
   ],
   "agents": [],
-  "prompts": []
+  "prompts": [],
+  "commands": [],
+  "plugins": [
+    {
+      "repo": "https://github.com/user/some-plugin.git",
+      "capabilities": ["skills", "commands"]
+    }
+  ]
 }
 ```
 
-- `path`：资源所在目录（默认按类型：`skills` / `agents` / `prompts`），skills 递归发现含 `SKILL.md` 的目录，agents/prompts 递归发现 `.md` 文件；同仓库多个资源目录可配置多条；skills 的特殊值 `"."` 表示整个仓库即一个 skill
+- `path`：资源所在目录（默认按类型：`skills` / `agents` / `prompts` / `commands`），skills 递归发现含 `SKILL.md` 的目录，agents/prompts 递归发现 `.md` 文件，commands 递归发现 `.md` 与 `.toml` 文件（`.toml` 提取 `description` + `prompt` 转成带 frontmatter 的 `.md`）；同仓库多个资源目录可配置多条；skills 的特殊值 `"."` 表示整个仓库即一个 skill
 - `include`：只拉取列出的资源名；省略则全量
 - `exclude`：排除列出的资源名
+- `capabilities`（仅 plugins）：限定拆解的能力，子集 of `["skills", "agents", "commands"]`，默认全部
+
+**plugins 类型**用于整个第三方插件仓库：按约定目录自动拆解——`skills/` → `skills/`、`agents/` → `agents/`、`commands/` → `commands/`。hooks / mcp / extensions 涉及自动执行代码与环境配置，**不做自动拆解**（需要 MCP 时手工评估后加进 `.mcp.json`）；插件至少需存在上述一个约定目录，否则同步报错。
 
 同名资源冲突时后到者被跳过并告警。
 

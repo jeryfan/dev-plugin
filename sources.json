@@ -48,5 +48,11 @@
       "include": ["code-reviewer"]
     }
   ],
-  "prompts": []
+  "prompts": [],
+  "commands": [],
+  "plugins": [
+    {
+      "repo": "https://github.com/DietrichGebert/ponytail.git"
+    }
+  ]
 }

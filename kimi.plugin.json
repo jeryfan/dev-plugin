@@ -14,6 +14,7 @@
   "skills": [
     "./skills/"
   ],
+  "commands": "./commands/",
   "mcpServers": {
     "chrome-devtools": {
       "command": "npx",

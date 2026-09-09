@@ -30,6 +30,7 @@
     ],
     "prompts": [
       "./prompts",
+      "./commands",
       "node_modules/pi-subagents/prompts",
       "node_modules/pi-review-loop/prompts"
     ]
