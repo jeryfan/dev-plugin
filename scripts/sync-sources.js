@@ -27,7 +27,7 @@
 
 const fs = require("node:fs");
 const path = require("node:path");
-const { execSync } = require("node:child_process");
+const { execFileSync } = require("node:child_process");
 
 const root = path.resolve(__dirname, "..");
 const manifest = JSON.parse(fs.readFileSync(path.join(root, "sources.json"), "utf8"));
@@ -36,63 +36,68 @@ const reposDir = path.join(root, ".cache", "repos");
 const lockFile = path.join(root, "sources-lock.json");
 
 const rmrf = (p) => fs.rmSync(p, { recursive: true, force: true });
-// 用 owner/repo 两级目录做缓存路径，避免不同 owner 的同名仓库（如 anthropics/skills 与 mattpocock/skills）冲突
-const repoKey = (repo) =>
-  repo.replace(/\.git$/, "").split("/").slice(-2).join("/");
+
+// 用 host/owner/repo 三级目录做缓存路径：避免不同 owner 的同名仓库、以及不同 host 的同 owner/repo 互相冲突
+const repoKey = (repo) => {
+  const clean = repo.replace(/\.git$/, "");
+  // scp 格式 git@host:owner/repo 归一化为 host/owner/repo，与 https 格式对齐
+  const normalized = clean.replace(/^git@([^:]+):/, "$1/");
+  return normalized.split("/").filter(Boolean).slice(-3).join("/");
+};
+
+/** 递归遍历 dir（跳过 . 开头与 node_modules）；onDir 返回 false 则不再下钻该目录 */
+function walk(dir, { onDir, onFile }) {
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    if (entry.name.startsWith(".") || entry.name === "node_modules") continue;
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      if (!onDir || onDir(full) !== false) walk(full, { onDir, onFile });
+    } else if (onFile) {
+      onFile(full);
+    }
+  }
+}
 
 /** 递归查找 dir 下所有含 SKILL.md 的目录 */
 function findSkillDirs(base) {
   const found = [];
-  (function walk(dir) {
-    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-      if (!entry.isDirectory() || entry.name.startsWith(".") || entry.name === "node_modules") continue;
-      const full = path.join(dir, entry.name);
-      if (fs.existsSync(path.join(full, "SKILL.md"))) {
-        found.push(full);
-      } else {
-        walk(full);
+  walk(base, {
+    onDir: (dir) => {
+      if (fs.existsSync(path.join(dir, "SKILL.md"))) {
+        found.push(dir);
+        return false;
       }
-    }
-  })(base);
+    },
+  });
   return found;
 }
 
 // md 发现时跳过的仓库说明类文件
 const MD_SKIP = new Set(["readme", "changelog", "license", "licence", "contributing", "code_of_conduct", "security"]);
 
+const isMdResource = (name) =>
+  name.endsWith(".md") && !MD_SKIP.has(name.slice(0, -3).toLowerCase());
+
 /** 递归查找 dir 下所有 .md 文件 */
 function findMdFiles(base) {
   const found = [];
-  (function walk(dir) {
-    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-      if (entry.name.startsWith(".") || entry.name === "node_modules") continue;
-      const full = path.join(dir, entry.name);
-      if (entry.isDirectory()) {
-        walk(full);
-      } else if (entry.name.endsWith(".md") && !MD_SKIP.has(entry.name.slice(0, -3).toLowerCase())) {
-        found.push(full);
-      }
-    }
-  })(base);
+  walk(base, {
+    onFile: (f) => {
+      if (isMdResource(path.basename(f))) found.push(f);
+    },
+  });
   return found;
 }
 
 /** 递归查找 dir 下所有命令文件（.md 与 .toml） */
 function findCommandFiles(base) {
   const found = [];
-  (function walk(dir) {
-    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-      if (entry.name.startsWith(".") || entry.name === "node_modules") continue;
-      const full = path.join(dir, entry.name);
-      if (entry.isDirectory()) {
-        walk(full);
-      } else if (entry.name.endsWith(".toml")) {
-        found.push(full);
-      } else if (entry.name.endsWith(".md") && !MD_SKIP.has(entry.name.slice(0, -3).toLowerCase())) {
-        found.push(full);
-      }
-    }
-  })(base);
+  walk(base, {
+    onFile: (f) => {
+      const name = path.basename(f);
+      if (name.endsWith(".toml") || isMdResource(name)) found.push(f);
+    },
+  });
   return found;
 }
 
@@ -182,7 +187,7 @@ function collectByType(targetType, dir, add) {
 /** 拆解第三方插件仓库：按 capabilities 声明的能力目录收集资源 */
 function collectPlugin(entry, clonedDir, tryAdd) {
   if (entry.path || entry.include || entry.exclude) {
-    console.error(`[sync-sources] ${entry.repo}: plugins 只支持 repo + capabilities；path / include / exclude 写到 capabilities.<能力> 的条目里（path 相对仓库根）`);
+    console.warn(`[sync-sources] ${entry.repo}: plugins 只支持 repo + capabilities；path / include / exclude 写到 capabilities.<能力> 的条目里（path 相对仓库根）`);
   }
   // 省略 capabilities 表示「有什么拆什么」，缺目录属正常；显式声明了才值得告警
   const explicit = entry.capabilities !== undefined && entry.capabilities !== null;
@@ -190,14 +195,14 @@ function collectPlugin(entry, clonedDir, tryAdd) {
   for (const [cap, specs] of Object.entries(normalizeCaps(entry))) {
     const target = PLUGIN_CAPS[cap];
     if (!target) {
-      console.error(`[sync-sources] 跳过不支持的插件能力 ${cap}（${entry.repo}），仅支持: ${CAP_KEYS.join(" / ")}`);
+      console.warn(`[sync-sources] 跳过不支持的插件能力 ${cap}（${entry.repo}），仅支持: ${CAP_KEYS.join(" / ")}`);
       continue;
     }
     for (const spec of specs) {
       const dir = path.join(clonedDir, spec.path || cap);
       if (!fs.existsSync(dir)) {
         if (explicit) {
-          console.error(`[sync-sources] ${entry.repo}: capabilities.${cap} 声明了 ${spec.path || cap}，但目录不存在`);
+          console.warn(`[sync-sources] ${entry.repo}: capabilities.${cap} 声明了 ${spec.path || cap}，但目录不存在`);
         }
         continue;
       }
@@ -234,39 +239,88 @@ for (const key of Object.keys(manifest)) {
 fs.mkdirSync(backupDir, { recursive: true });
 fs.mkdirSync(reposDir, { recursive: true });
 
+/** 执行 git 命令，失败时抛出带 stderr 的错误（execFileSync 不走 shell，杜绝 URL 注入） */
+function git(args, cwd) {
+  try {
+    return execFileSync("git", args, {
+      cwd,
+      encoding: "utf8",
+      stdio: ["pipe", "pipe", "pipe"],
+    });
+  } catch (err) {
+    const stderr = (err.stderr || "").toString().trim();
+    throw new Error(`git ${args[0]} ${stderr || err.message}`);
+  }
+}
+
+function cloneRepo(repo, clonedDir) {
+  fs.mkdirSync(path.dirname(clonedDir), { recursive: true });
+  git(["clone", "--depth", "1", repo, clonedDir], root);
+}
+
 /** 克隆/更新仓库，返回 { clonedDir, commit } */
 function checkout(repo) {
   const clonedDir = path.join(reposDir, repoKey(repo));
+  // 旧版缓存键是 owner/repo 两级，迁移到 host/owner/repo 三级：直接改名复用，避免全量重克隆
+  if (!fs.existsSync(clonedDir)) {
+    const legacyDir = path.join(reposDir, repo.replace(/\.git$/, "").split("/").slice(-2).join("/"));
+    if (legacyDir !== clonedDir && fs.existsSync(path.join(legacyDir, ".git"))) {
+      fs.mkdirSync(path.dirname(clonedDir), { recursive: true });
+      fs.renameSync(legacyDir, clonedDir);
+      // 旧 owner 目录搬空后顺手清掉（非空则忽略）
+      try { fs.rmdirSync(path.dirname(legacyDir)); } catch { /* 还有其他仓库在用 */ }
+    }
+  }
   if (fs.existsSync(path.join(clonedDir, ".git"))) {
-    execSync("git fetch --depth 1 origin HEAD && git reset --hard FETCH_HEAD", {
-      cwd: clonedDir,
-      stdio: "pipe",
-    });
+    try {
+      git(["fetch", "--depth", "1", "origin", "HEAD"], clonedDir);
+      git(["reset", "--hard", "FETCH_HEAD"], clonedDir);
+    } catch (err) {
+      // 缓存损坏（上次中断、手动改坏 .git 等）时降级为删除重克隆，而不是整体失败
+      console.warn(`[sync-sources] ${repo}: 更新缓存失败（${err.message}），改为重新克隆`);
+      rmrf(clonedDir);
+      cloneRepo(repo, clonedDir);
+    }
   } else {
     rmrf(clonedDir);
-    fs.mkdirSync(path.dirname(clonedDir), { recursive: true });
-    execSync(`git clone --depth 1 ${repo} "${clonedDir}"`, { stdio: "pipe" });
+    cloneRepo(repo, clonedDir);
   }
-  const commit = execSync("git rev-parse --short HEAD", { cwd: clonedDir, encoding: "utf8" }).trim();
+  const commit = git(["rev-parse", "--short", "HEAD"], clonedDir).trim();
   return { clonedDir, commit };
 }
 
+// 同一 repo 在清单中出现多次时只 fetch 一次
+const repoCache = new Map();
+const checkoutCached = (repo) => {
+  if (!repoCache.has(repo)) repoCache.set(repo, checkout(repo));
+  return repoCache.get(repo);
+};
+
 // 解析出本次要同步的资源列表
 const planned = []; // { type, name, source, repo, commit, content? }
+const plannedKeys = new Set(); // "type:name"（小写），O(1) 去重并挡掉大小写不敏感文件系统上的碰撞
 try {
   for (const [type, entries] of Object.entries(manifest)) {
+    if (!Array.isArray(entries)) {
+      throw new Error(`sources.json: ${type} 必须是条目数组`);
+    }
     for (const entry of entries) {
-      const { clonedDir, commit } = checkout(entry.repo);
+      if (!entry || typeof entry !== "object" || Array.isArray(entry) || typeof entry.repo !== "string" || !entry.repo) {
+        throw new Error(`sources.json: ${type} 的每个条目都必须包含 repo 字段（git 仓库 URL）`);
+      }
+      const { clonedDir, commit } = checkoutCached(entry.repo);
 
-      const tryAdd = (type, name, source, extra = {}) => {
+      const tryAdd = (resourceType, name, source, extra = {}) => {
         const { filters = {}, ...rest } = extra;
         if (filters.include && !filters.include.includes(name)) return;
         if (filters.exclude && filters.exclude.includes(name)) return;
-        if (planned.some((p) => p.type === type && p.name === name)) {
-          console.error(`[sync-sources] 跳过重名 ${type}: ${name}（${entry.repo}）`);
+        const key = `${resourceType}:${name}`.toLowerCase();
+        if (plannedKeys.has(key)) {
+          console.warn(`[sync-sources] 跳过重名 ${resourceType}: ${name}（${entry.repo}）`);
           return;
         }
-        planned.push({ type, name, source, repo: entry.repo, commit, ...rest });
+        plannedKeys.add(key);
+        planned.push({ type: resourceType, name, source, repo: entry.repo, commit, ...rest });
       };
 
       if (type === "plugins") {
@@ -296,7 +350,7 @@ try {
     }
   }
 } catch (err) {
-  console.error(`[sync-sources] 克隆失败: ${err.message}`);
+  console.error(`[sync-sources] 同步中止: ${err.message}`);
   process.exit(1);
 }
 
@@ -306,6 +360,7 @@ if (planned.length === 0) {
 }
 
 const targetPath = (p) => path.join(root, TYPES[p.type].targetDir, p.name + (TYPES[p.type].isDir ? "" : ".md"));
+const backupPath = (p) => path.join(backupDir, p.type, p.name + (TYPES[p.type].isDir ? "" : ".md"));
 
 // 备份区同时承担两件事：暂存"将被覆盖的同名资源"，以及暂存"已退出清单、要被移除的资源"。
 // 两者一起进备份区，失败时才回滚得回来——移除跑在备份之前的话，被删的资源恢复不了。
@@ -315,7 +370,7 @@ const backedUp = [];
 const stash = (p) => {
   const target = targetPath(p);
   if (!fs.existsSync(target)) return false;
-  const backup = path.join(backupDir, p.type, p.name + (TYPES[p.type].isDir ? "" : ".md"));
+  const backup = backupPath(p);
   fs.mkdirSync(path.dirname(backup), { recursive: true });
   fs.renameSync(target, backup);
   backedUp.push(p);
@@ -334,6 +389,8 @@ const retired = Object.entries(oldLock).flatMap(([type, locked]) =>
     : [],
 );
 
+// copied 记录"已开始落地"的项：回滚时只删这些，尚未 stash 的旧版本绝不能动
+const copied = [];
 try {
   for (const p of retired) {
     if (stash(p)) console.log(`[sync-sources] 移除已退出清单的 ${p.type}: ${p.name}`);
@@ -342,6 +399,7 @@ try {
   for (const p of planned) stash(p);
 
   for (const p of planned) {
+    copied.push(p); // 先登记再复制：复制中途失败时该目标可能有残留，需要清掉（原件已在备份区）
     const target = targetPath(p);
     fs.mkdirSync(path.dirname(target), { recursive: true });
     if (TYPES[p.type].isDir) {
@@ -358,10 +416,12 @@ try {
     console.log(`[sync-sources] ${p.name} @ ${p.commit} → ${TYPES[p.type].targetDir}/${p.name}`);
   }
 } catch (err) {
-  for (const p of planned) rmrf(targetPath(p));
+  for (const p of copied) rmrf(targetPath(p));
   for (const p of backedUp) {
-    const backup = path.join(backupDir, p.type, p.name + (TYPES[p.type].isDir ? "" : ".md"));
-    fs.renameSync(backup, targetPath(p));
+    const backup = backupPath(p);
+    const target = targetPath(p);
+    fs.mkdirSync(path.dirname(target), { recursive: true });
+    fs.renameSync(backup, target);
   }
   rmrf(backupDir);
   console.error(`[sync-sources] 同步失败，已回退: ${err.message}`);
@@ -374,6 +434,8 @@ for (const p of planned) {
   lock[p.type] ||= {};
   lock[p.type][p.name] = { repo: p.repo, commit: p.commit };
 }
-fs.writeFileSync(lockFile, `${JSON.stringify(lock, null, 2)}\n`);
+// 原子写：先写临时文件再 rename，避免中断留下截断的 lock 导致下次 retired 计算错误
+fs.writeFileSync(`${lockFile}.tmp`, `${JSON.stringify(lock, null, 2)}\n`);
+fs.renameSync(`${lockFile}.tmp`, lockFile);
 const counts = Object.entries(lock).map(([t, m]) => `${t}: ${Object.keys(m).length}`).join(", ");
 console.log(`[sync-sources] 完成，共 ${planned.length} 个资源（${counts}）`);

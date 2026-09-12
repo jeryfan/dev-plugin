@@ -2,39 +2,39 @@
   "skills": {
     "banner-design": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "4aad058"
+      "commit": "7f69fed"
     },
     "brand": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "4aad058"
+      "commit": "7f69fed"
     },
     "design": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "4aad058"
+      "commit": "7f69fed"
     },
     "design-system": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "4aad058"
+      "commit": "7f69fed"
     },
     "slides": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "4aad058"
+      "commit": "7f69fed"
     },
     "ui-styling": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "4aad058"
+      "commit": "7f69fed"
     },
     "ui-ux-pro-max": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "4aad058"
+      "commit": "7f69fed"
     },
     "frontend-design": {
       "repo": "https://github.com/anthropics/claude-code.git",
-      "commit": "347b38e"
+      "commit": "df52d04"
     },
     "diagram-design": {
       "repo": "https://github.com/cathrynlavery/diagram-design.git",
-      "commit": "dcd9317"
+      "commit": "8d8b299"
     },
     "playwright-cli": {
       "repo": "https://github.com/microsoft/playwright-cli.git",
@@ -42,11 +42,11 @@
     },
     "mcp-builder": {
       "repo": "https://github.com/anthropics/skills.git",
-      "commit": "41bbe19"
+      "commit": "34040c9"
     },
     "skill-creator": {
       "repo": "https://github.com/anthropics/skills.git",
-      "commit": "41bbe19"
+      "commit": "34040c9"
     },
     "code-review-and-quality": {
       "repo": "https://github.com/addyosmani/agent-skills.git",
