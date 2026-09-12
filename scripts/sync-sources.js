@@ -22,6 +22,7 @@
  *   skills/（含 SKILL.md 的目录）→ skills，agents/（.md）→ agents，commands/ → commands，prompts/（.md）→ prompts。
  *   hooks / mcp / extensions 涉及执行代码与环境配置，不做自动拆解。
  * 清单之外的目录（个人资源）不动；上次 vendor 但本次清单不再包含的会被自动移除（依据 sources-lock.json）。
+ * 移除与覆盖都先移进 .cache/sources/ 备份区，任一步失败则整体回滚到同步前状态。
  */
 
 const fs = require("node:fs");
@@ -306,36 +307,40 @@ if (planned.length === 0) {
 
 const targetPath = (p) => path.join(root, TYPES[p.type].targetDir, p.name + (TYPES[p.type].isDir ? "" : ".md"));
 
-// 上次 vendor 但本次清单不再包含的资源，从目标目录移除
+// 备份区同时承担两件事：暂存"将被覆盖的同名资源"，以及暂存"已退出清单、要被移除的资源"。
+// 两者一起进备份区，失败时才回滚得回来——移除跑在备份之前的话，被删的资源恢复不了。
+// 先清空备份区，避免上次中断留下的残骸让 rename 失败
+rmrf(backupDir);
+const backedUp = [];
+const stash = (p) => {
+  const target = targetPath(p);
+  if (!fs.existsSync(target)) return false;
+  const backup = path.join(backupDir, p.type, p.name + (TYPES[p.type].isDir ? "" : ".md"));
+  fs.mkdirSync(path.dirname(backup), { recursive: true });
+  fs.renameSync(target, backup);
+  backedUp.push(p);
+  return true;
+};
+
+// 上次 vendor 但本次清单不再包含的资源
 const oldLock = fs.existsSync(lockFile)
   ? JSON.parse(fs.readFileSync(lockFile, "utf8"))
   : {};
-for (const [type, locked] of Object.entries(oldLock)) {
-  if (!TYPES[type]) continue;
-  for (const name of Object.keys(locked)) {
-    const p = { type, name };
-    if (planned.some((x) => x.type === type && x.name === name)) continue;
-    if (fs.existsSync(targetPath(p))) {
-      rmrf(targetPath(p));
-      console.log(`[sync-sources] 移除已退出清单的 ${type}: ${name}`);
-    }
-  }
-}
-
-// 备份将被覆盖的同名资源，失败时回退。先清空备份区，避免上次中断留下的残骸让 rename 失败
-rmrf(backupDir);
-const backedUp = [];
-for (const p of planned) {
-  const target = targetPath(p);
-  if (fs.existsSync(target)) {
-    const backup = path.join(backupDir, p.type, p.name + (TYPES[p.type].isDir ? "" : ".md"));
-    fs.mkdirSync(path.dirname(backup), { recursive: true });
-    fs.renameSync(target, backup);
-    backedUp.push(p);
-  }
-}
+const retired = Object.entries(oldLock).flatMap(([type, locked]) =>
+  TYPES[type]
+    ? Object.keys(locked)
+        .map((name) => ({ type, name }))
+        .filter((p) => !planned.some((x) => x.type === p.type && x.name === p.name))
+    : [],
+);
 
 try {
+  for (const p of retired) {
+    if (stash(p)) console.log(`[sync-sources] 移除已退出清单的 ${p.type}: ${p.name}`);
+  }
+
+  for (const p of planned) stash(p);
+
   for (const p of planned) {
     const target = targetPath(p);
     fs.mkdirSync(path.dirname(target), { recursive: true });
@@ -358,6 +363,7 @@ try {
     const backup = path.join(backupDir, p.type, p.name + (TYPES[p.type].isDir ? "" : ".md"));
     fs.renameSync(backup, targetPath(p));
   }
+  rmrf(backupDir);
   console.error(`[sync-sources] 同步失败，已回退: ${err.message}`);
   process.exit(1);
 }

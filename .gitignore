@@ -1,4 +1,7 @@
-external/
 .cache/
 node_modules/
+.venv/
+__pycache__/
+.ruff_cache/
 .DS_Store
+package-lock.json

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * 统一 bump 四个清单文件的版本号。
- * 用法: npm run version -- 1.2.3
+ * 统一 bump 四份清单文件的版本号。
+ * 用法: npm run bump-version -- 1.2.3
  */
 const fs = require('fs');
 const path = require('path');
@@ -16,7 +16,7 @@ const FILES = [
 const version = process.argv[2];
 
 if (!version || !/^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$/.test(version)) {
-  console.error('用法: npm run version -- <semver>，例如: npm run version -- 0.1.0');
+  console.error('用法: npm run bump-version -- <semver>，例如: npm run bump-version -- 0.1.0');
   process.exit(1);
 }
 
