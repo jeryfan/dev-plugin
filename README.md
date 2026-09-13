@@ -148,7 +148,10 @@ pi install /absolute/path/to/dev-plugin
     {
       "repo": "https://github.com/user/some-plugin.git",
       "capabilities": {
-        "skills": [{ "path": "skills", "include": ["a"] }, { "path": "legacy/skills" }],
+        "skills": [
+          { "path": "skills", "include": ["a"] },
+          { "path": "legacy/skills" }
+        ],
         "commands": true
       }
     }
@@ -176,7 +179,7 @@ pi install /absolute/path/to/dev-plugin
 使用以下命令统一更新四个清单的版本号：
 
 ```bash
-npm run version -- <semver>
+npm run bump-version -- <semver>
 ```
 
 该命令会更新 `.claude-plugin/plugin.json`、`.codex-plugin/plugin.json`、`kimi.plugin.json` 和 `package.json`。

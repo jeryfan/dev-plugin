@@ -19,7 +19,7 @@
     {
       "repo": "https://github.com/anthropics/skills.git",
       "path": "skills",
-      "include": ["skill-creator", "mcp-builder"]
+      "include": ["skill-creator", "mcp-builder", "claude-api", "webapp-testing"]
     },
     {
       "repo": "https://github.com/addyosmani/agent-skills.git",
@@ -33,7 +33,16 @@
     {
       "repo": "https://github.com/obra/superpowers.git",
       "path": "skills",
-      "include": ["brainstorming", "writing-plans"]
+      "include": [
+        "brainstorming",
+        "writing-plans",
+        "executing-plans",
+        "verification-before-completion",
+        "dispatching-parallel-agents",
+        "subagent-driven-development",
+        "using-git-worktrees",
+        "using-superpowers"
+      ]
     },
     {
       "repo": "https://github.com/mattpocock/skills.git",

@@ -30,7 +30,7 @@
     },
     "frontend-design": {
       "repo": "https://github.com/anthropics/claude-code.git",
-      "commit": "df52d04"
+      "commit": "b593276"
     },
     "diagram-design": {
       "repo": "https://github.com/cathrynlavery/diagram-design.git",
@@ -40,6 +40,10 @@
       "repo": "https://github.com/microsoft/playwright-cli.git",
       "commit": "655530f"
     },
+    "claude-api": {
+      "repo": "https://github.com/anthropics/skills.git",
+      "commit": "34040c9"
+    },
     "mcp-builder": {
       "repo": "https://github.com/anthropics/skills.git",
       "commit": "34040c9"
@@ -48,19 +52,47 @@
       "repo": "https://github.com/anthropics/skills.git",
       "commit": "34040c9"
     },
+    "webapp-testing": {
+      "repo": "https://github.com/anthropics/skills.git",
+      "commit": "34040c9"
+    },
     "code-review-and-quality": {
       "repo": "https://github.com/addyosmani/agent-skills.git",
-      "commit": "6ca0cd7"
+      "commit": "be4e44a"
     },
     "debugging-and-error-recovery": {
       "repo": "https://github.com/addyosmani/agent-skills.git",
-      "commit": "6ca0cd7"
+      "commit": "be4e44a"
     },
     "test-driven-development": {
       "repo": "https://github.com/addyosmani/agent-skills.git",
-      "commit": "6ca0cd7"
+      "commit": "be4e44a"
     },
     "brainstorming": {
+      "repo": "https://github.com/obra/superpowers.git",
+      "commit": "b36e082"
+    },
+    "dispatching-parallel-agents": {
+      "repo": "https://github.com/obra/superpowers.git",
+      "commit": "b36e082"
+    },
+    "executing-plans": {
+      "repo": "https://github.com/obra/superpowers.git",
+      "commit": "b36e082"
+    },
+    "subagent-driven-development": {
+      "repo": "https://github.com/obra/superpowers.git",
+      "commit": "b36e082"
+    },
+    "using-git-worktrees": {
+      "repo": "https://github.com/obra/superpowers.git",
+      "commit": "b36e082"
+    },
+    "using-superpowers": {
+      "repo": "https://github.com/obra/superpowers.git",
+      "commit": "b36e082"
+    },
+    "verification-before-completion": {
       "repo": "https://github.com/obra/superpowers.git",
       "commit": "b36e082"
     },
