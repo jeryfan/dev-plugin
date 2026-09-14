@@ -30,7 +30,7 @@
     },
     "frontend-design": {
       "repo": "https://github.com/anthropics/claude-code.git",
-      "commit": "b593276"
+      "commit": "f4ceeec"
     },
     "diagram-design": {
       "repo": "https://github.com/cathrynlavery/diagram-design.git",
@@ -108,61 +108,73 @@
       "repo": "https://github.com/mattpocock/skills.git",
       "commit": "3cca18b"
     },
+    "composition-patterns": {
+      "repo": "https://github.com/vercel-labs/agent-skills.git",
+      "commit": "063bee9"
+    },
+    "react-view-transitions": {
+      "repo": "https://github.com/vercel-labs/agent-skills.git",
+      "commit": "063bee9"
+    },
+    "web-design-guidelines": {
+      "repo": "https://github.com/vercel-labs/agent-skills.git",
+      "commit": "063bee9"
+    },
     "ponytail": {
       "repo": "https://github.com/DietrichGebert/ponytail.git",
-      "commit": "356918e"
+      "commit": "e3ba2aa"
     },
     "ponytail-audit": {
       "repo": "https://github.com/DietrichGebert/ponytail.git",
-      "commit": "356918e"
+      "commit": "e3ba2aa"
     },
     "ponytail-debt": {
       "repo": "https://github.com/DietrichGebert/ponytail.git",
-      "commit": "356918e"
+      "commit": "e3ba2aa"
     },
     "ponytail-gain": {
       "repo": "https://github.com/DietrichGebert/ponytail.git",
-      "commit": "356918e"
+      "commit": "e3ba2aa"
     },
     "ponytail-help": {
       "repo": "https://github.com/DietrichGebert/ponytail.git",
-      "commit": "356918e"
+      "commit": "e3ba2aa"
     },
     "ponytail-review": {
       "repo": "https://github.com/DietrichGebert/ponytail.git",
-      "commit": "356918e"
+      "commit": "e3ba2aa"
     }
   },
   "agents": {
     "code-reviewer": {
       "repo": "https://github.com/VoltAgent/awesome-claude-code-subagents.git",
-      "commit": "3097abe"
+      "commit": "ca7a50b"
     }
   },
   "commands": {
     "ponytail-audit": {
       "repo": "https://github.com/DietrichGebert/ponytail.git",
-      "commit": "356918e"
+      "commit": "e3ba2aa"
     },
     "ponytail-debt": {
       "repo": "https://github.com/DietrichGebert/ponytail.git",
-      "commit": "356918e"
+      "commit": "e3ba2aa"
     },
     "ponytail-gain": {
       "repo": "https://github.com/DietrichGebert/ponytail.git",
-      "commit": "356918e"
+      "commit": "e3ba2aa"
     },
     "ponytail-help": {
       "repo": "https://github.com/DietrichGebert/ponytail.git",
-      "commit": "356918e"
+      "commit": "e3ba2aa"
     },
     "ponytail-review": {
       "repo": "https://github.com/DietrichGebert/ponytail.git",
-      "commit": "356918e"
+      "commit": "e3ba2aa"
     },
     "ponytail": {
       "repo": "https://github.com/DietrichGebert/ponytail.git",
-      "commit": "356918e"
+      "commit": "e3ba2aa"
     }
   }
 }

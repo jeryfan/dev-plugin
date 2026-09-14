@@ -48,6 +48,15 @@
       "repo": "https://github.com/mattpocock/skills.git",
       "path": "skills/productivity",
       "include": ["grill-me", "grilling"]
+    },
+    {
+      "repo": "https://github.com/vercel-labs/agent-skills.git",
+      "path": "skills",
+      "include": [
+        "web-design-guidelines",
+        "react-view-transitions",
+        "composition-patterns"
+      ]
     }
   ],
   "agents": [
