@@ -1,0 +1,15 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "dev-plugin",
+  "version": "0.0.5",
+  "description": "Personal cross-tool agent plugin: skills and MCP servers for Claude Code, Codex, Kimi Code and pi.",
+  "author": {
+    "name": "jeryfan"
+  },
+  "license": "MIT",
+  "keywords": [
+    "personal",
+    "skills",
+    "mcp"
+  ]
+}

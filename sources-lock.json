@@ -2,43 +2,43 @@
   "skills": {
     "banner-design": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "7f69fed"
+      "commit": "dcc40ff"
     },
     "brand": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "7f69fed"
+      "commit": "dcc40ff"
     },
     "design": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "7f69fed"
+      "commit": "dcc40ff"
     },
     "design-system": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "7f69fed"
+      "commit": "dcc40ff"
     },
     "slides": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "7f69fed"
+      "commit": "dcc40ff"
     },
     "ui-styling": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "7f69fed"
+      "commit": "dcc40ff"
     },
     "ui-ux-pro-max": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "7f69fed"
+      "commit": "dcc40ff"
     },
     "frontend-design": {
       "repo": "https://github.com/anthropics/claude-code.git",
-      "commit": "f4ceeec"
+      "commit": "8187baa"
     },
     "diagram-design": {
       "repo": "https://github.com/cathrynlavery/diagram-design.git",
-      "commit": "8d8b299"
+      "commit": "dc1ace4"
     },
     "playwright-cli": {
       "repo": "https://github.com/microsoft/playwright-cli.git",
-      "commit": "655530f"
+      "commit": "74354ec"
     },
     "claude-api": {
       "repo": "https://github.com/anthropics/skills.git",
@@ -58,55 +58,55 @@
     },
     "code-review-and-quality": {
       "repo": "https://github.com/addyosmani/agent-skills.git",
-      "commit": "be4e44a"
+      "commit": "dc27a9c"
     },
     "debugging-and-error-recovery": {
       "repo": "https://github.com/addyosmani/agent-skills.git",
-      "commit": "be4e44a"
+      "commit": "dc27a9c"
     },
     "test-driven-development": {
       "repo": "https://github.com/addyosmani/agent-skills.git",
-      "commit": "be4e44a"
+      "commit": "dc27a9c"
     },
     "brainstorming": {
       "repo": "https://github.com/obra/superpowers.git",
-      "commit": "b36e082"
+      "commit": "5bf4e78"
     },
     "dispatching-parallel-agents": {
       "repo": "https://github.com/obra/superpowers.git",
-      "commit": "b36e082"
+      "commit": "5bf4e78"
     },
     "executing-plans": {
       "repo": "https://github.com/obra/superpowers.git",
-      "commit": "b36e082"
+      "commit": "5bf4e78"
     },
     "subagent-driven-development": {
       "repo": "https://github.com/obra/superpowers.git",
-      "commit": "b36e082"
+      "commit": "5bf4e78"
     },
     "using-git-worktrees": {
       "repo": "https://github.com/obra/superpowers.git",
-      "commit": "b36e082"
+      "commit": "5bf4e78"
     },
     "using-superpowers": {
       "repo": "https://github.com/obra/superpowers.git",
-      "commit": "b36e082"
+      "commit": "5bf4e78"
     },
     "verification-before-completion": {
       "repo": "https://github.com/obra/superpowers.git",
-      "commit": "b36e082"
+      "commit": "5bf4e78"
     },
     "writing-plans": {
       "repo": "https://github.com/obra/superpowers.git",
-      "commit": "b36e082"
+      "commit": "5bf4e78"
     },
     "grill-me": {
       "repo": "https://github.com/mattpocock/skills.git",
-      "commit": "3cca18b"
+      "commit": "c55ee46"
     },
     "grilling": {
       "repo": "https://github.com/mattpocock/skills.git",
-      "commit": "3cca18b"
+      "commit": "c55ee46"
     },
     "composition-patterns": {
       "repo": "https://github.com/vercel-labs/agent-skills.git",
@@ -148,7 +148,7 @@
   "agents": {
     "code-reviewer": {
       "repo": "https://github.com/VoltAgent/awesome-claude-code-subagents.git",
-      "commit": "ca7a50b"
+      "commit": "82b7382"
     }
   },
   "commands": {

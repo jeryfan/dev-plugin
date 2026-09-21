@@ -10,7 +10,7 @@
 - `commands/`：斜杠命令（vendor 或个人）。Claude 自动发现插件根的 `commands/`；Kimi 由 `kimi.plugin.json` 的 `commands` 字段声明；pi 通过 `package.json` 的 `pi.prompts` 读取；**Codex 插件规范不支持 commands**
 - `extensions/`：pi 扩展（通用命令扩展），由 `package.json` 的 `pi.extensions` 随包分发给安装者；
 - `.agents/skills/`：维护本仓库用的**元 skill**（如何添加资源的操作指南），只在本地 clone 下工作，不随插件分发——`package.json` 的 `pi.skills` 只列了 `./skills`。新增 skill 的规范写在这里，而不是放进 `skills/`
-- `.mcp.json`：MCP server 唯一数据源，改完运行 `npm run sync` 同步到 `kimi.plugin.json`（Kimi 不读 .mcp.json，必须内联）。Claude / Codex 直接读 `.mcp.json`；pi 不支持包级 MCP
+- `.mcp.json`：MCP server 唯一数据源，改完运行 `npm run sync` 同步到 `mcp.json`（Agent Plugins 1.0 标准）与 `kimi.plugin.json`（Kimi 不读 .mcp.json，必须内联）。Claude / Codex 直接读 `.mcp.json`；pi 不支持包级 MCP
 - `sources.json`：第三方资源拉取清单（手工维护，含 skills / agents / prompts / commands / plugins 五类；plugins 为整个插件仓库，按约定目录自动拆解）
 - `sources-lock.json`：vendor 版本锁定记录（脚本生成，不要手改）
 
@@ -32,7 +32,7 @@ npm run sync   # = sync-mcp（MCP）+ sync-sources（第三方 skills / agents /
 ```
 
 - `sync-sources.js` 按 `sources.json` 浅克隆上游最新版复制进 `skills/`、`agents/`、`prompts/`、`commands/`，带备份回退；清单外的目录（个人资源）不动；上次 vendor 但本次清单不再包含的资源会被自动移除
-- 发版流程：`npm run sync` → `npm run bump-version -- <semver>`（bump `.claude-plugin/plugin.json`、`.codex-plugin/plugin.json`、`kimi.plugin.json`、`package.json`）→ 提交推送
+- 发版流程：`npm run sync` → `npm run bump-version -- <semver>`（bump `plugin.json`、`.claude-plugin/plugin.json`、`.codex-plugin/plugin.json`、`kimi.plugin.json`、`package.json`）→ 提交推送
 
 ## 添加 skills
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * 统一 bump 四份清单文件的版本号。
+ * 统一 bump 五份清单文件的版本号。
  * 用法: npm run bump-version -- 1.2.3
  */
 const fs = require('fs');
@@ -8,6 +8,7 @@ const path = require('path');
 
 const FILES = [
   'package.json',
+  'plugin.json',
   'kimi.plugin.json',
   '.claude-plugin/plugin.json',
   '.codex-plugin/plugin.json',

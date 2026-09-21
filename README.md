@@ -16,18 +16,20 @@ dev-plugin/
 ├── AGENTS.md                         # 仓库维护说明
 ├── .pi/AGENTS.md                     # 安装时复制给 pi 的全局说明
 ├── .mcp.json                         # MCP 唯一数据源
+├── mcp.json                          # Agent Plugins 1.0 标准 MCP 配置（由 sync 生成）
 ├── .claude-plugin/
 │   ├── plugin.json                   # Claude Code 清单
 │   └── marketplace.json              # Claude Code marketplace
 ├── .codex-plugin/plugin.json         # Codex 清单
 ├── .agents/plugins/marketplace.json  # Codex marketplace
 ├── .agents/skills/                   # 维护本仓库的元 skills，不随插件分发
+├── plugin.json                       # Agent Plugins 1.0 标准清单
 ├── kimi.plugin.json                  # Kimi 清单，mcpServers 由 sync 生成
 ├── package.json                      # pi 清单与 npm 生命周期脚本
 ├── sources.json                      # 第三方资源拉取清单
 ├── sources-lock.json                 # vendor 上游版本记录
 └── scripts/
-    ├── sync-mcp.js                   # 同步 Kimi MCP 配置
+    ├── sync-mcp.js                   # 同步 mcp.json 与 Kimi MCP 配置
     ├── sync-sources.js               # 同步第三方资源
     ├── setup-pi.js                   # 配置 pi 的全局 MCP 与 AGENTS.md
     └── bump-version.js               # 统一更新清单版本号
@@ -170,16 +172,16 @@ pi install /absolute/path/to/dev-plugin
 
 ### 新增 MCP server
 
-只改 `.mcp.json`，然后运行 `node scripts/sync-mcp.js`（脚本会同步到 `kimi.plugin.json`）。Claude / Codex 直接读 `.mcp.json`，无需同步。发版前仍需按上文执行完整的 `npm run sync`。
+只改 `.mcp.json`，然后运行 `node scripts/sync-mcp.js`（脚本会同步生成 `mcp.json` 并内联到 `kimi.plugin.json`）。Claude / Codex 直接读 `.mcp.json`，无需手动同步。发版前仍需按上文执行完整的 `npm run sync`。
 
-> 注：Kimi 不读 `.mcp.json`，`mcpServers` 必须内联在 `kimi.plugin.json`，这就是同步脚本存在的原因。pi 不支持包级 MCP；本包的 `postinstall` 会通过 `scripts/setup-pi.js` 写入 pi 的全局配置，覆盖行为见安装说明。
+> 注：Agent Plugins 1.0 规范要求根目录为 `mcp.json`；Kimi 不读 `.mcp.json`，`mcpServers` 必须内联在 `kimi.plugin.json`，这就是同步脚本存在的原因。pi 不支持包级 MCP；本包的 `postinstall` 会通过 `scripts/setup-pi.js` 写入 pi 的全局配置，覆盖行为见安装说明。
 
 ### 版本号
 
-使用以下命令统一更新四个清单的版本号：
+使用以下命令统一更新五个清单的版本号：
 
 ```bash
 npm run bump-version -- <semver>
 ```
 
-该命令会更新 `.claude-plugin/plugin.json`、`.codex-plugin/plugin.json`、`kimi.plugin.json` 和 `package.json`。
+该命令会更新 `plugin.json`、`.claude-plugin/plugin.json`、`.codex-plugin/plugin.json`、`kimi.plugin.json` 和 `package.json`。
