@@ -1,15 +1,15 @@
-import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent"
 
 export default function (pi: ExtensionAPI) {
 	pi.registerProvider("custom", {
 		name: "Custom",
-		baseUrl: "http://localhost:8080/v1",
+		baseUrl: "http://agentrouter.org/v1",
 		apiKey: "$CUSTOM_API_KEY",
-		api: "openai-completions",
+		api: "openai-responses",
 		models: [
 			{
-				id: "kimi-k3",
-				name: "Kimi K3",
+				id: "deepseek-v4-flash",
+				name: "deepseek-v4-flash",
 				reasoning: true,
 				thinkingLevelMap: {
 					off: null,
@@ -32,8 +32,8 @@ export default function (pi: ExtensionAPI) {
 				},
 			},
 			{
-				id: "gpt-5.6-sol",
-				name: "GPT-5.6 Sol",
+				id: "gpt-6-astra",
+				name: "gpt-6-astra",
 				reasoning: true,
 				thinkingLevelMap: {
 					off: "none",
@@ -69,5 +69,5 @@ export default function (pi: ExtensionAPI) {
 				},
 			},
 		],
-	});
+	})
 }
