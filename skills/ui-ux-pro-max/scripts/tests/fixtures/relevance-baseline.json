@@ -2302,14 +2302,14 @@
       "diagnostics": {
         "abstained": false,
         "calibration_version": "2026-08-12-v1",
-        "margin": 7.076134819591472,
+        "margin": 7.080993541615083,
         "normalized_query": "Three.js OrbitControls must be imported separately",
         "query_rewrites": [],
         "reason": "matched",
-        "runner_up_score": 8.693423066563268,
+        "runner_up_score": 8.686482541063965,
         "search_query": "Three.js OrbitControls must be imported separately",
         "token_coverage": 1.0,
-        "top_score": 15.76955788615474
+        "top_score": 15.767476082679048
       },
       "expectedRoute": null,
       "grades": [
@@ -2337,21 +2337,21 @@
           "Guideline": "Single Renderer Per Page"
         },
         {
-          "Category": "Animation",
-          "Guideline": "Pause Render Loop on Tab Hidden"
+          "Category": "Raycasting",
+          "Guideline": "NDC Mouse Coordinates"
         }
       ],
       "diagnostics": {
         "abstained": false,
         "calibration_version": "2026-08-12-v1",
-        "margin": 3.10124290892679,
+        "margin": 3.131031647168797,
         "normalized_query": "avoid excessive GPU work on retina screens by limiting renderer DPR",
         "query_rewrites": [],
         "reason": "matched",
-        "runner_up_score": 4.439617524910303,
+        "runner_up_score": 4.455624545484412,
         "search_query": "avoid excessive GPU work on retina screens by limiting renderer DPR",
         "token_coverage": 0.4444444444444444,
-        "top_score": 7.540860433837093
+        "top_score": 7.586656192653209
       },
       "expectedRoute": null,
       "grades": [
@@ -3277,7 +3277,7 @@
     "typoRecoveryAt3": 1.0
   },
   "oracleFingerprint": "02e7226428c64a995ec24ae104ce4d186f5f91bf0f062556e90ef9b0fcb6d67a",
-  "runtimeFingerprint": "1d18a1cac526f15cea7f4e94cef4bed39fafa250a2b6cc81d8c8007b47c6042e",
+  "runtimeFingerprint": "3f902a88e2f9bd5f12965664cd31a60a31117de69f8b19ad1968536ea3c984b7",
   "samples": {
     "cases": 90,
     "designSystem": 8,
