@@ -4,7 +4,7 @@ export default function (pi: ExtensionAPI) {
 	pi.registerProvider("custom", {
 		name: "Custom",
 		baseUrl: "http://agentrouter.org/v1",
-		apiKey: "$CUSTOM_API_KEY",
+		apiKey: "",
 		api: "openai-responses",
 		models: [
 			{
