@@ -19,7 +19,7 @@
     {
       "repo": "https://github.com/anthropics/skills.git",
       "path": "skills",
-      "include": ["skill-creator", "mcp-builder", "claude-api", "webapp-testing"]
+      "include": ["skill-creator", "mcp-builder", "webapp-testing"]
     },
     {
       "repo": "https://github.com/addyosmani/agent-skills.git",
