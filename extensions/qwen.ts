@@ -4,7 +4,6 @@ export default function (pi: ExtensionAPI) {
 	pi.registerProvider("bailian", {
 		name: "Bailian",
 		baseUrl: "http://newapi.gkm/v1",
-		apiKey: "",
 		api: "openai-completions",
 		models: [
 			{

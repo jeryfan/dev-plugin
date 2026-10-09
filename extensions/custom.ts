@@ -3,8 +3,7 @@ import type { ExtensionAPI } from "@earendil-works/pi-coding-agent"
 export default function (pi: ExtensionAPI) {
 	pi.registerProvider("custom", {
 		name: "Custom",
-		baseUrl: "http://agentrouter.org/v1",
-		apiKey: "",
+		baseUrl: "https://agentrouter.org/v1",
 		api: "openai-responses",
 		models: [
 			{
