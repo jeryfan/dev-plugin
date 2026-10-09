@@ -20,8 +20,7 @@
       "node_modules/pi-web-access/index.ts",
       "node_modules/context-mode/build/adapters/pi/extension.js",
       "node_modules/pi-subagents/index.js",
-      "node_modules/pi-review-loop/index.ts",
-      "node_modules/pi-background-task/dist/index.js"
+      "node_modules/pi-review-loop/index.ts"
     ],
     "skills": [
       "./skills",
@@ -39,7 +38,6 @@
     "@narumitw/pi-btw": "^0.61.1",
     "@narumitw/pi-plan-mode": "^0.59.0",
     "context-mode": "^1.0.169",
-    "pi-background-task": "^0.1.1",
     "pi-review-loop": "^0.4.4",
     "pi-rewind": "^0.5.0",
     "pi-subagents": "^0.76.1",
