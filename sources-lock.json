@@ -2,39 +2,39 @@
   "skills": {
     "banner-design": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "50d8a7d"
+      "commit": "67803ea"
     },
     "brand": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "50d8a7d"
+      "commit": "67803ea"
     },
     "design": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "50d8a7d"
+      "commit": "67803ea"
     },
     "design-system": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "50d8a7d"
+      "commit": "67803ea"
     },
     "slides": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "50d8a7d"
+      "commit": "67803ea"
     },
     "ui-styling": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "50d8a7d"
+      "commit": "67803ea"
     },
     "ui-ux-pro-max": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "50d8a7d"
+      "commit": "67803ea"
     },
     "frontend-design": {
       "repo": "https://github.com/anthropics/claude-code.git",
-      "commit": "e47cc82"
+      "commit": "2301018"
     },
     "diagram-design": {
       "repo": "https://github.com/cathrynlavery/diagram-design.git",
-      "commit": "f4547ee"
+      "commit": "7a2e221"
     },
     "playwright-cli": {
       "repo": "https://github.com/microsoft/playwright-cli.git",
@@ -42,59 +42,59 @@
     },
     "mcp-builder": {
       "repo": "https://github.com/anthropics/skills.git",
-      "commit": "9d63080"
+      "commit": "dbd4588"
     },
     "skill-creator": {
       "repo": "https://github.com/anthropics/skills.git",
-      "commit": "9d63080"
+      "commit": "dbd4588"
     },
     "webapp-testing": {
       "repo": "https://github.com/anthropics/skills.git",
-      "commit": "9d63080"
+      "commit": "dbd4588"
     },
     "code-review-and-quality": {
       "repo": "https://github.com/addyosmani/agent-skills.git",
-      "commit": "1401c8b"
+      "commit": "1be8e34"
     },
     "debugging-and-error-recovery": {
       "repo": "https://github.com/addyosmani/agent-skills.git",
-      "commit": "1401c8b"
+      "commit": "1be8e34"
     },
     "test-driven-development": {
       "repo": "https://github.com/addyosmani/agent-skills.git",
-      "commit": "1401c8b"
+      "commit": "1be8e34"
     },
     "brainstorming": {
       "repo": "https://github.com/obra/superpowers.git",
-      "commit": "8ca22db"
+      "commit": "bb92a77"
     },
     "dispatching-parallel-agents": {
       "repo": "https://github.com/obra/superpowers.git",
-      "commit": "8ca22db"
+      "commit": "bb92a77"
     },
     "executing-plans": {
       "repo": "https://github.com/obra/superpowers.git",
-      "commit": "8ca22db"
+      "commit": "bb92a77"
     },
     "subagent-driven-development": {
       "repo": "https://github.com/obra/superpowers.git",
-      "commit": "8ca22db"
+      "commit": "bb92a77"
     },
     "using-git-worktrees": {
       "repo": "https://github.com/obra/superpowers.git",
-      "commit": "8ca22db"
+      "commit": "bb92a77"
     },
     "using-superpowers": {
       "repo": "https://github.com/obra/superpowers.git",
-      "commit": "8ca22db"
+      "commit": "bb92a77"
     },
     "verification-before-completion": {
       "repo": "https://github.com/obra/superpowers.git",
-      "commit": "8ca22db"
+      "commit": "bb92a77"
     },
     "writing-plans": {
       "repo": "https://github.com/obra/superpowers.git",
-      "commit": "8ca22db"
+      "commit": "bb92a77"
     },
     "grill-me": {
       "repo": "https://github.com/mattpocock/skills.git",
@@ -118,27 +118,27 @@
     },
     "ponytail": {
       "repo": "https://github.com/DietrichGebert/ponytail.git",
-      "commit": "9cc65d0"
+      "commit": "9b58c1f"
     },
     "ponytail-audit": {
       "repo": "https://github.com/DietrichGebert/ponytail.git",
-      "commit": "9cc65d0"
+      "commit": "9b58c1f"
     },
     "ponytail-debt": {
       "repo": "https://github.com/DietrichGebert/ponytail.git",
-      "commit": "9cc65d0"
+      "commit": "9b58c1f"
     },
     "ponytail-gain": {
       "repo": "https://github.com/DietrichGebert/ponytail.git",
-      "commit": "9cc65d0"
+      "commit": "9b58c1f"
     },
     "ponytail-help": {
       "repo": "https://github.com/DietrichGebert/ponytail.git",
-      "commit": "9cc65d0"
+      "commit": "9b58c1f"
     },
     "ponytail-review": {
       "repo": "https://github.com/DietrichGebert/ponytail.git",
-      "commit": "9cc65d0"
+      "commit": "9b58c1f"
     }
   },
   "agents": {
@@ -150,27 +150,27 @@
   "commands": {
     "ponytail-audit": {
       "repo": "https://github.com/DietrichGebert/ponytail.git",
-      "commit": "9cc65d0"
+      "commit": "9b58c1f"
     },
     "ponytail-debt": {
       "repo": "https://github.com/DietrichGebert/ponytail.git",
-      "commit": "9cc65d0"
+      "commit": "9b58c1f"
     },
     "ponytail-gain": {
       "repo": "https://github.com/DietrichGebert/ponytail.git",
-      "commit": "9cc65d0"
+      "commit": "9b58c1f"
     },
     "ponytail-help": {
       "repo": "https://github.com/DietrichGebert/ponytail.git",
-      "commit": "9cc65d0"
+      "commit": "9b58c1f"
     },
     "ponytail-review": {
       "repo": "https://github.com/DietrichGebert/ponytail.git",
-      "commit": "9cc65d0"
+      "commit": "9b58c1f"
     },
     "ponytail": {
       "repo": "https://github.com/DietrichGebert/ponytail.git",
-      "commit": "9cc65d0"
+      "commit": "9b58c1f"
     }
   }
 }
