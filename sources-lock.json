@@ -64,6 +64,10 @@
       "repo": "https://github.com/addyosmani/agent-skills.git",
       "commit": "8bfcc1f"
     },
+    "git-commit": {
+      "repo": "https://github.com/github/awesome-copilot.git",
+      "commit": "5269f7e"
+    },
     "brainstorming": {
       "repo": "https://github.com/obra/superpowers.git",
       "commit": "2ce8aa1"
@@ -98,11 +102,11 @@
     },
     "grill-me": {
       "repo": "https://github.com/mattpocock/skills.git",
-      "commit": "a496f55"
+      "commit": "5ae4816"
     },
     "grilling": {
       "repo": "https://github.com/mattpocock/skills.git",
-      "commit": "a496f55"
+      "commit": "5ae4816"
     },
     "composition-patterns": {
       "repo": "https://github.com/vercel-labs/agent-skills.git",

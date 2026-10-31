@@ -31,6 +31,11 @@
       ]
     },
     {
+      "repo": "https://github.com/github/awesome-copilot.git",
+      "path": "skills",
+      "include": ["git-commit"]
+    },
+    {
       "repo": "https://github.com/obra/superpowers.git",
       "path": "skills",
       "include": [
