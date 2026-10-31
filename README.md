@@ -12,7 +12,7 @@ dev-plugin/
 ├── agents/                           # vendor agents
 ├── extensions/                       # pi 扩展
 ├── prompts/                          # pi prompts；当前无自有 prompt
-├── commands/                         # 斜杠命令（Claude / Kimi / pi；Codex 插件不支持）
+├── commands/                         # 斜杠命令（Claude / Kimi / pi）
 ├── AGENTS.md                         # 仓库维护说明
 ├── .pi/AGENTS.md                     # 安装时复制给 pi 的全局说明
 ├── .mcp.json                         # MCP 唯一数据源
@@ -121,7 +121,7 @@ pi install /absolute/path/to/dev-plugin
 
 ### 新增个人 skill
 
-在 `skills/<name>/SKILL.md` 创建个人 skill，并添加包含 `name`、`description` 的 YAML frontmatter。该目录由四个工具的包装层作为共享 skills 来源，无需逐个修改清单。
+在 `skills/<name>/SKILL.md` 创建个人 skill，并添加包含 `name`、`description` 的 YAML frontmatter。该目录由各工具的包装层作为共享 skills 来源，无需逐个修改清单。
 
 流程规范见 `.agents/skills/add-custom-skill/SKILL.md`。**个人 skill 不会被 `npm run sync` 删除**——脚本只移除「`sources-lock.json` 里有记录、但本次清单已不含」的 vendor 资源，清单外的目录一律不动。
 
@@ -161,7 +161,7 @@ pi install /absolute/path/to/dev-plugin
 }
 ```
 
-- `path`：资源所在目录（默认按类型：`skills` / `agents` / `prompts` / `commands`），skills 递归发现含 `SKILL.md` 的目录，agents/prompts 递归发现 `.md` 文件，commands 递归发现 `.md` 与 `.toml` 文件（`.toml` 提取 `description` + `prompt` 转成带 frontmatter 的 `.md`）；同仓库多个资源目录可配置多条；skills 的特殊值 `"."` 表示整个仓库即一个 skill；plugins 条目不支持 `path` / `include` / `exclude`（写到 `capabilities` 的条目里，相对仓库根）
+- `path`：资源所在目录（默认按类型：`skills` / `agents` / `prompts` / `commands`），skills 递归发现含 `SKILL.md` 的目录，agents/prompts 递归发现 `.md` 文件，commands 递归发现 `.md` 与 `.toml` 文件（`.toml` 提取 `description` + `prompt` 转成带 frontmatter 的 `.md`）；同仓库多个资源目录可配置多条；skills 的特殊值 `"."` 表示整个仓库即一个 skill；plugins 条目的 `path` / `include` / `exclude` 写在 `capabilities` 的条目里（相对仓库根）
 - `include`：只拉取列出的资源名；省略则全量
 - `exclude`：排除列出的资源名
 - `capabilities`（仅 plugins）：与顶层清单同构的字典，键为能力名（`skills` / `agents` / `commands` / `prompts`），值为条目数组，条目字段与顶层一致（`path` / `include` / `exclude`，无 `repo`）；`true` 表示按约定目录全量拆解，同一能力可写多条条目，省略则拆解全部能力
@@ -174,11 +174,11 @@ pi install /absolute/path/to/dev-plugin
 
 只改 `.mcp.json`，然后运行 `node scripts/sync-mcp.js`（脚本会同步生成 `mcp.json` 并内联到 `kimi.plugin.json`）。Claude / Codex 直接读 `.mcp.json`，无需手动同步。发版前仍需按上文执行完整的 `npm run sync`。
 
-> 注：Agent Plugins 1.0 规范要求根目录为 `mcp.json`；Kimi 不读 `.mcp.json`，`mcpServers` 必须内联在 `kimi.plugin.json`，这就是同步脚本存在的原因。pi 不支持包级 MCP；本包的 `postinstall` 会通过 `scripts/setup-pi.js` 写入 pi 的全局配置，覆盖行为见安装说明。
+> 注：Agent Plugins 1.0 规范要求根目录为 `mcp.json`；Kimi 的 `mcpServers` 内联在 `kimi.plugin.json`，这就是同步脚本存在的原因。本包的 `postinstall` 会通过 `scripts/setup-pi.js` 把 MCP 写入 pi 的全局配置，覆盖行为见安装说明。
 
 ### 版本号
 
-使用以下命令统一更新五个清单的版本号：
+使用以下命令统一更新五份清单的版本号：
 
 ```bash
 npm run bump-version -- <semver>
