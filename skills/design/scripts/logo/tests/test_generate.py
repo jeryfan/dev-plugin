@@ -1,13 +1,46 @@
 import importlib.util
+import io
+import os
+import sys
 import tempfile
 import unittest
 from pathlib import Path
-from unittest.mock import call, patch
+from types import ModuleType, SimpleNamespace
+from unittest.mock import Mock, call, patch
 
 MODULE_PATH = Path(__file__).parents[1] / "generate.py"
-SPEC = importlib.util.spec_from_file_location("logo_generate", MODULE_PATH)
-logo_generate = importlib.util.module_from_spec(SPEC)
-SPEC.loader.exec_module(logo_generate)
+
+
+def _load_module():
+    spec = importlib.util.spec_from_file_location("logo_generate", MODULE_PATH)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+logo_generate = _load_module()
+
+JPEG = b"\xff\xd8\xff\xe0jpeg-bytes"
+PNG = b"\x89PNG\r\n\x1a\npng-bytes"
+
+
+def _image_response(mime_type, data):
+    part = SimpleNamespace(inline_data=SimpleNamespace(mime_type=mime_type, data=data))
+    return SimpleNamespace(
+        candidates=[SimpleNamespace(content=SimpleNamespace(parts=[part]))]
+    )
+
+
+def _fake_genai(client):
+    """sys.modules entries for an offline google.genai whose Client is client."""
+    types = ModuleType("google.genai.types")
+    types.GenerateContentConfig = types.ImageConfig = types.SafetySetting = dict
+    genai = ModuleType("google.genai")
+    genai.Client = lambda api_key: client
+    genai.types = types
+    google = ModuleType("google")
+    google.genai = genai
+    return {"google": google, "google.genai": genai, "google.genai.types": types}
 
 
 class AtlasGenerationTests(unittest.TestCase):
@@ -282,6 +315,139 @@ class MuapiGenerationTests(unittest.TestCase):
             )
 
         json_request.assert_called_once()
+
+
+class GeminiImageTypeTests(unittest.TestCase):
+    def setUp(self):
+        self.client = Mock()
+        for patcher in (
+            patch.dict(sys.modules, _fake_genai(self.client)),
+            patch.object(logo_generate, "GEMINI_API_KEY", "test-key"),
+        ):
+            patcher.start()
+            self.addCleanup(patcher.stop)
+        temp_dir = tempfile.TemporaryDirectory()
+        self.addCleanup(temp_dir.cleanup)
+        self.dir = Path(temp_dir.name)
+
+    def _generate(self, mime_type, data, requested_name):
+        self.client.models.generate_content.return_value = _image_response(
+            mime_type, data
+        )
+        return logo_generate._generate_with_gemini(
+            "logo prompt", str(self.dir / requested_name), "1:1", use_pro=True
+        )
+
+    def test_jpeg_is_saved_with_jpg_extension(self):
+        with patch("sys.stdout", new_callable=io.StringIO):
+            saved = self._generate("image/jpeg", JPEG, "logo.png")
+
+        self.assertEqual(saved, str(self.dir / "logo.jpg"))
+        self.assertEqual(Path(saved).read_bytes(), JPEG)
+        self.assertFalse((self.dir / "logo.png").exists())
+
+    def test_matching_extension_keeps_requested_path(self):
+        for mime_type, data, name in (
+            ("image/png", PNG, "logo.png"),
+            ("image/jpeg", JPEG, "logo.jpeg"),
+            ("image/jpeg", JPEG, "logo.JPG"),
+        ):
+            with self.subTest(name=name):
+                saved = self._generate(mime_type, data, name)
+                self.assertEqual(saved, str(self.dir / name))
+                self.assertEqual(Path(saved).read_bytes(), data)
+
+    def test_unknown_image_type_keeps_requested_path(self):
+        self.assertEqual(
+            logo_generate._path_for_image_type("logo.png", "image/heic"), "logo.png"
+        )
+
+    def test_generate_logo_prints_and_returns_the_saved_path(self):
+        self.client.models.generate_content.return_value = _image_response(
+            "image/jpeg", JPEG
+        )
+        with patch("sys.stdout", new_callable=io.StringIO) as stdout:
+            saved = logo_generate.generate_logo(
+                "test mark", output_path=str(self.dir / "logo.png"), use_pro=True
+            )
+
+        self.assertEqual(saved, str(self.dir / "logo.jpg"))
+        self.assertIn(f"Logo saved to: {saved}", stdout.getvalue())
+
+    def test_pro_requests_the_configured_pro_model(self):
+        self._generate("image/png", PNG, "logo.png")
+
+        self.assertEqual(
+            self.client.models.generate_content.call_args.kwargs["model"],
+            logo_generate.GEMINI_PRO,
+        )
+
+
+class GeminiModelIdTests(unittest.TestCase):
+    def test_pro_defaults_to_the_ga_model(self):
+        with patch.dict(os.environ):
+            os.environ.pop("GEMINI_PRO_IMAGE_MODEL", None)
+            module = _load_module()
+
+        self.assertEqual(module.GEMINI_PRO, "gemini-3-pro-image")
+
+    def test_model_ids_can_be_overridden_from_the_environment(self):
+        with patch.dict(
+            os.environ,
+            {"GEMINI_FLASH_IMAGE_MODEL": "flash-next", "GEMINI_PRO_IMAGE_MODEL": "pro-next"},
+        ):
+            module = _load_module()
+
+        self.assertEqual(module.GEMINI_FLASH, "flash-next")
+        self.assertEqual(module.GEMINI_PRO, "pro-next")
+
+
+class ExitStatusTests(unittest.TestCase):
+    def setUp(self):
+        temp_dir = tempfile.TemporaryDirectory()
+        self.addCleanup(temp_dir.cleanup)
+        self.dir = Path(temp_dir.name)
+
+    def _run_main(self, *args):
+        with patch.object(sys, "argv", ["generate.py", *args]), patch(
+            "sys.stdout", new_callable=io.StringIO
+        ):
+            logo_generate.main()
+
+    def test_failed_single_request_exits_1(self):
+        client = Mock()
+        client.models.generate_content.side_effect = RuntimeError(
+            "429 RESOURCE_EXHAUSTED"
+        )
+        with patch.dict(sys.modules, _fake_genai(client)), patch.object(
+            logo_generate, "GEMINI_API_KEY", "test-key"
+        ), self.assertRaises(SystemExit) as raised:
+            self._run_main("--prompt", "test mark", "--output", str(self.dir / "logo.png"))
+
+        self.assertEqual(raised.exception.code, 1)
+
+    @patch.object(logo_generate.time, "sleep")
+    @patch.object(logo_generate, "generate_logo", return_value=None)
+    def test_batch_with_no_logos_exits_1(self, generate_logo, sleep):
+        with self.assertRaises(SystemExit) as raised:
+            self._run_main(
+                "--brand", "Demo", "--batch", "2", "--output-dir", str(self.dir)
+            )
+
+        self.assertEqual(raised.exception.code, 1)
+        self.assertEqual(generate_logo.call_count, 2)
+
+    @patch.object(logo_generate.time, "sleep")
+    @patch.object(
+        logo_generate, "generate_logo", side_effect=[None, "demo_modern_02.png"]
+    )
+    def test_partial_batch_exits_0(self, generate_logo, sleep):
+        self._run_main("--brand", "Demo", "--batch", "2", "--output-dir", str(self.dir))
+
+        self.assertEqual(generate_logo.call_count, 2)
+
+    def test_list_styles_exits_0(self):
+        self._run_main("--list-styles")
 
 
 if __name__ == "__main__":

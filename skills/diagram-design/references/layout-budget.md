@@ -22,6 +22,7 @@ These are the per-type limits. The universal rows in SKILL.md §7 (9 nodes, 12 a
 | Limit | Rule |
 |---|---|
 | Max unique components / relationships / ledger entries (architecture delta) | 8 / 10 / 8 |
+| Max admin bands / traffic scopes / nodes (architecture containment) | 2 / 4 / 8 |
 | Max lifelines (sequence) | 5 |
 | Max combined fragments (sequence) | 1 (default); 2 only if each is single-region `opt`/`loop` |
 | Max `alt` regions (sequence) | 2 |
@@ -50,11 +51,13 @@ These are the per-type limits. The universal rows in SKILL.md §7 (9 nodes, 12 a
 | Max series (line chart) | 5 |
 | Max tasks (Gantt) | 12 |
 | Max points (scatter plot) | 30 |
+| Max series / outliers (box plot) | 8 / 8, 1 focal series |
 | Max stages / nodes / flows (sankey) | 3 / 8 / 12 |
 | Max categories (fishbone) | 6 bones, 3 sub-causes each |
 | Max components / links (wardley) | 9 / 12, 2 movement arrows |
 | Max columns / cards (kanban) | 5 / 12 total, 4 per column |
 | Max stages / rows (user journey) | 6 / 3, 2 pain markers |
+| Max stages / layers (service blueprint) | 6 stages; required customer / frontstage / backstage; optional evidence / support; 1 focal cell |
 | Max zones / nodes / paths (deployment) | 3 / 6 / 8, 9 artifacts |
 | Max nodes / edges (dependency) | 9 / 14, 4 ranks, 1 cycle |
 | Max classes / relationships (UML class) | 7 / 8, 5 members per compartment |

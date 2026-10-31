@@ -64,7 +64,9 @@ python3 scripts/cip/render-html.py --brand "TopGroup" --industry "consulting" --
 ## Models
 
 - `flash` (default): `gemini-2.5-flash-image` - Fast, cost-effective
-- `pro`: `gemini-3-pro-image-preview` - Quality, 4K text rendering
+- `pro`: `gemini-3-pro-image` - Quality, 4K text rendering
+
+Set `GEMINI_FLASH_IMAGE_MODEL` or `GEMINI_PRO_IMAGE_MODEL` to use another Gemini model id.
 
 ## Deliverable Categories
 

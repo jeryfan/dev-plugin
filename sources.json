@@ -5,7 +5,7 @@
       "path": ".claude/skills"
     },
     {
-      "repo": "https://github.com/anthropics/claude-code.git",
+      "repo": "https://github.com/anthropics/claude-plugins-official.git",
       "path": "plugins/frontend-design/skills",
       "include": ["frontend-design"]
     },
@@ -70,7 +70,18 @@
   "commands": [],
   "plugins": [
     {
-      "repo": "https://github.com/DietrichGebert/ponytail.git"
+      "repo": "https://github.com/DietrichGebert/ponytail.git",
+      "capabilities": {
+        "skills": [{ "path": "skills", "include": ["ponytail-audit", "ponytail-review"] }],
+        "commands": [{ "include": ["ponytail-audit", "ponytail-review"] }]
+      }
+    },
+    {
+      "repo": "https://github.com/cursor/plugins.git",
+      "capabilities": {
+        "skills": [{ "path": "pstack/skills" }],
+        "agents": [{ "path": "pstack/agents" }]
+      }
     }
   ]
 }
