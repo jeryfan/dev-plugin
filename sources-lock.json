@@ -2,31 +2,31 @@
   "skills": {
     "banner-design": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "9a3f14f"
+      "commit": "bf41cbc"
     },
     "brand": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "9a3f14f"
+      "commit": "bf41cbc"
     },
     "design": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "9a3f14f"
+      "commit": "bf41cbc"
     },
     "design-system": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "9a3f14f"
+      "commit": "bf41cbc"
     },
     "slides": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "9a3f14f"
+      "commit": "bf41cbc"
     },
     "ui-styling": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "9a3f14f"
+      "commit": "bf41cbc"
     },
     "ui-ux-pro-max": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "9a3f14f"
+      "commit": "bf41cbc"
     },
     "frontend-design": {
       "repo": "https://github.com/anthropics/claude-plugins-official.git",
@@ -38,7 +38,11 @@
     },
     "playwright-cli": {
       "repo": "https://github.com/microsoft/playwright-cli.git",
-      "commit": "faf6bc5"
+      "commit": "0a80807"
+    },
+    "ego-browser": {
+      "repo": "https://github.com/citrolabs/ego-lite.git",
+      "commit": "1240716"
     },
     "mcp-builder": {
       "repo": "https://github.com/anthropics/skills.git",
@@ -102,11 +106,11 @@
     },
     "grill-me": {
       "repo": "https://github.com/mattpocock/skills.git",
-      "commit": "5ae4816"
+      "commit": "4ae2317"
     },
     "grilling": {
       "repo": "https://github.com/mattpocock/skills.git",
-      "commit": "5ae4816"
+      "commit": "4ae2317"
     },
     "composition-patterns": {
       "repo": "https://github.com/vercel-labs/agent-skills.git",
@@ -130,235 +134,235 @@
     },
     "architect": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "arena": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "automate-me": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "benchmark-checklist": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "blast-radius": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "bro": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "correct": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "create-formal-verification-skill": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "create-verification-skill": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "figure-it-out": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "how": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "in-your-own-words": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "interrogate": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "ketchup": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "ketchup-video": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "maintain-formal-verification-skill": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "maintain-verification-skill": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "make-bot-ui": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "no-comments": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "poteto-help": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "poteto-mode": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "principle-attack-the-premise": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "principle-boundary-discipline": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "principle-build-the-lever": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "principle-encode-lessons-in-structure": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "principle-exhaust-the-design-space": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "principle-experience-first": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "principle-explain-the-number": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "principle-fix-root-causes": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "principle-foundational-thinking": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "principle-guard-the-context-window": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "principle-laziness-protocol": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "principle-make-operations-idempotent": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "principle-migrate-callers-then-delete-legacy-apis": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "principle-minimize-reader-load": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "principle-model-the-domain": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "principle-never-block-on-the-human": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "principle-outcome-oriented-execution": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "principle-prove-it-works": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "principle-redesign-from-first-principles": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "principle-separate-before-serializing-shared-state": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "principle-sequence-verifiable-units": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "principle-subtract-before-you-add": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "principle-test-behavior-not-implementation": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "principle-type-system-discipline": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "recall": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "reflect": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "setup-pstack": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "sharpen": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "show-me-your-work": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "statechart": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "swarm": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "tdd": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "teach": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "technical-writing": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "typescript-best-practices": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "unslop": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "why": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     }
   },
   "agents": {
@@ -368,11 +372,11 @@
     },
     "comment-sicko": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     },
     "poteto-agent": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "4dd1d05"
+      "commit": "ae5650f"
     }
   },
   "commands": {

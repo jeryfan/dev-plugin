@@ -17,6 +17,11 @@
       "include": ["playwright-cli"]
     },
     {
+      "repo": "https://github.com/citrolabs/ego-lite.git",
+      "path": "skills",
+      "include": ["ego-browser"]
+    },
+    {
       "repo": "https://github.com/anthropics/skills.git",
       "path": "skills",
       "include": ["skill-creator", "mcp-builder", "webapp-testing"]
