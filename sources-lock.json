@@ -2,43 +2,43 @@
   "skills": {
     "banner-design": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "bf41cbc"
+      "commit": "713eef5"
     },
     "brand": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "bf41cbc"
+      "commit": "713eef5"
     },
     "design": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "bf41cbc"
+      "commit": "713eef5"
     },
     "design-system": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "bf41cbc"
+      "commit": "713eef5"
     },
     "slides": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "bf41cbc"
+      "commit": "713eef5"
     },
     "ui-styling": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "bf41cbc"
+      "commit": "713eef5"
     },
     "ui-ux-pro-max": {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "bf41cbc"
+      "commit": "713eef5"
     },
     "frontend-design": {
       "repo": "https://github.com/anthropics/claude-plugins-official.git",
-      "commit": "a7ba5b9"
+      "commit": "fa4eb54"
     },
     "diagram-design": {
       "repo": "https://github.com/cathrynlavery/diagram-design.git",
-      "commit": "0cf73c3"
+      "commit": "f24d98b"
     },
     "playwright-cli": {
       "repo": "https://github.com/microsoft/playwright-cli.git",
-      "commit": "0a80807"
+      "commit": "db2a0fa"
     },
     "ego-browser": {
       "repo": "https://github.com/citrolabs/ego-lite.git",
@@ -58,51 +58,51 @@
     },
     "code-review-and-quality": {
       "repo": "https://github.com/addyosmani/agent-skills.git",
-      "commit": "8bfcc1f"
+      "commit": "301b02b"
     },
     "debugging-and-error-recovery": {
       "repo": "https://github.com/addyosmani/agent-skills.git",
-      "commit": "8bfcc1f"
+      "commit": "301b02b"
     },
     "test-driven-development": {
       "repo": "https://github.com/addyosmani/agent-skills.git",
-      "commit": "8bfcc1f"
+      "commit": "301b02b"
     },
     "git-commit": {
       "repo": "https://github.com/github/awesome-copilot.git",
-      "commit": "5269f7e"
+      "commit": "edbecfa"
     },
     "brainstorming": {
       "repo": "https://github.com/obra/superpowers.git",
-      "commit": "2ce8aa1"
+      "commit": "22f0b46"
     },
     "dispatching-parallel-agents": {
       "repo": "https://github.com/obra/superpowers.git",
-      "commit": "2ce8aa1"
+      "commit": "22f0b46"
     },
     "executing-plans": {
       "repo": "https://github.com/obra/superpowers.git",
-      "commit": "2ce8aa1"
+      "commit": "22f0b46"
     },
     "subagent-driven-development": {
       "repo": "https://github.com/obra/superpowers.git",
-      "commit": "2ce8aa1"
+      "commit": "22f0b46"
     },
     "using-git-worktrees": {
       "repo": "https://github.com/obra/superpowers.git",
-      "commit": "2ce8aa1"
+      "commit": "22f0b46"
     },
     "using-superpowers": {
       "repo": "https://github.com/obra/superpowers.git",
-      "commit": "2ce8aa1"
+      "commit": "22f0b46"
     },
     "verification-before-completion": {
       "repo": "https://github.com/obra/superpowers.git",
-      "commit": "2ce8aa1"
+      "commit": "22f0b46"
     },
     "writing-plans": {
       "repo": "https://github.com/obra/superpowers.git",
-      "commit": "2ce8aa1"
+      "commit": "22f0b46"
     },
     "grill-me": {
       "repo": "https://github.com/mattpocock/skills.git",
@@ -134,249 +134,249 @@
     },
     "architect": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "arena": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "automate-me": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "benchmark-checklist": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "blast-radius": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "bro": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "correct": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "create-formal-verification-skill": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "create-verification-skill": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "figure-it-out": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "how": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "in-your-own-words": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "interrogate": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "ketchup": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "ketchup-video": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "maintain-formal-verification-skill": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "maintain-verification-skill": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "make-bot-ui": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "no-comments": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "poteto-help": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "poteto-mode": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "principle-attack-the-premise": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "principle-boundary-discipline": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "principle-build-the-lever": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "principle-encode-lessons-in-structure": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "principle-exhaust-the-design-space": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "principle-experience-first": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "principle-explain-the-number": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "principle-fix-root-causes": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "principle-foundational-thinking": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "principle-guard-the-context-window": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "principle-laziness-protocol": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "principle-make-operations-idempotent": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "principle-migrate-callers-then-delete-legacy-apis": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "principle-minimize-reader-load": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "principle-model-the-domain": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "principle-never-block-on-the-human": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "principle-outcome-oriented-execution": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "principle-prove-it-works": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "principle-redesign-from-first-principles": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "principle-separate-before-serializing-shared-state": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "principle-sequence-verifiable-units": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "principle-subtract-before-you-add": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "principle-test-behavior-not-implementation": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "principle-type-system-discipline": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "recall": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "reflect": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "setup-pstack": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "sharpen": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "show-me-your-work": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "statechart": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "swarm": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "tdd": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "teach": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "technical-writing": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "typescript-best-practices": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "unslop": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "why": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     }
   },
   "agents": {
     "code-reviewer": {
       "repo": "https://github.com/VoltAgent/awesome-claude-code-subagents.git",
-      "commit": "f2e2ea7"
+      "commit": "ed74d11"
     },
     "comment-sicko": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     },
     "poteto-agent": {
       "repo": "https://github.com/cursor/plugins.git",
-      "commit": "ae5650f"
+      "commit": "fd268b8"
     }
   },
   "commands": {
