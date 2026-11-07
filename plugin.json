@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "dev-plugin",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Personal cross-tool agent plugin: skills and MCP servers for Claude Code, Codex, Kimi Code and pi.",
   "author": {
     "name": "jeryfan"
