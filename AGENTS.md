@@ -31,8 +31,8 @@ config 和缓存收在同一目录，备份/迁移/卸载对着一个目录操�
 npm run sync   # = sync-mcp（MCP）+ sync-sources（第三方 skills / agents / prompts / commands / plugins）
 ```
 
-- `sync-sources.js` 按 `sources.json` 浅克隆上游最新版复制进 `skills/`、`agents/`、`prompts/`、`commands/`，带备份回退；清单外的目录（个人资源）不动；上次 vendor 但本次清单不再包含的资源会被自动移除
-- 发版流程：`npm run sync` → `npm run bump-version -- <semver>`（bump `plugin.json`、`.claude-plugin/plugin.json`、`.codex-plugin/plugin.json`、`kimi.plugin.json`、`package.json`）→ 提交推送
+- `sync-sources.js` 按 `sources.json` 浅克隆上游最新版复制进 `skills/`、`agents/`、`prompts/`、`commands/`，带备份回退；清单外的目录（个人资源）不动；上次 vendor 但本次清单不再包含的资源会被自动移除；`include`/`exclude` 支持 `*` / `?` glob；skill 落地时自动把 frontmatter 的 `name` 归一化为目录名；`--check` 只查上游版本不落盘
+- 发版流程：`npm run check` → `npm run sync` → `npm run bump-version -- <semver>`（bump `plugin.json`、`.claude-plugin/plugin.json`、`.codex-plugin/plugin.json`、`kimi.plugin.json`、`package.json`）→ 提交推送
 
 ## 添加 skills
 

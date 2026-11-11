@@ -2,7 +2,8 @@
   "skills": [
     {
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "path": ".claude/skills"
+      "path": ".claude/skills",
+      "include": ["ui-ux-pro-max", "slides"]
     },
     {
       "repo": "https://github.com/anthropics/claude-plugins-official.git",
@@ -30,7 +31,6 @@
       "repo": "https://github.com/addyosmani/agent-skills.git",
       "path": "skills",
       "include": [
-        "test-driven-development",
         "code-review-and-quality",
         "debugging-and-error-recovery"
       ]
@@ -43,7 +43,7 @@
     {
       "repo": "https://github.com/mattpocock/skills.git",
       "path": "skills/productivity",
-      "include": ["grill-me", "grilling"]
+      "include": ["grilling"]
     },
     {
       "repo": "https://github.com/vercel-labs/agent-skills.git",

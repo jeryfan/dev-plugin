@@ -20,7 +20,7 @@
       "command": "npx",
       "args": [
         "-y",
-        "chrome-devtools-mcp@latest",
+        "chrome-devtools-mcp@1.12.0",
         "--autoConnect"
       ]
     },
@@ -28,7 +28,7 @@
       "command": "npx",
       "args": [
         "-y",
-        "@upstash/context7-mcp@latest"
+        "@upstash/context7-mcp@4.6.0"
       ]
     }
   }

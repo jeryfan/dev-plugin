@@ -8,6 +8,7 @@
   "license": "MIT",
   "scripts": {
     "sync": "node scripts/sync-mcp.js && node scripts/sync-sources.js",
+    "check": "node scripts/check.js",
     "bump-version": "node scripts/bump-version.js",
     "postinstall": "node scripts/setup-pi.js"
   },

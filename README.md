@@ -30,8 +30,9 @@ dev-plugin/
 ├── sources-lock.json                 # vendor 上游版本记录
 └── scripts/
     ├── sync-mcp.js                   # 同步 mcp.json 与 Kimi MCP 配置
-    ├── sync-sources.js               # 同步第三方资源
-    ├── setup-pi.js                   # 配置 pi 的全局 MCP 与 AGENTS.md
+    ├── sync-sources.js               # 同步第三方资源（--check 只查上游版本不落盘）
+    ├── setup-pi.js                   # 配置 pi 的全局 MCP 与 AGENTS.md（合并式，非覆盖）
+    ├── check.js                      # 离线体检：版本/frontmatter/lock/MCP 一致性
     └── bump-version.js               # 统一更新清单版本号
 ```
 
@@ -115,7 +116,7 @@ pi update --extensions
 pi install /absolute/path/to/dev-plugin
 ```
 
-> 注意：pi 安装会触发本包的 `postinstall`。`scripts/setup-pi.js` 会把 `.mcp.json` 和 `.pi/AGENTS.md` 分别复制到 `~/.pi/agent/mcp.json` 与 `~/.pi/agent/AGENTS.md`，并覆盖已有同名文件；如已有自定义配置，请先备份。
+> 注意：pi 安装会触发本包的 `postinstall`。`scripts/setup-pi.js` 同步配置到 `~/.pi/agent/`：`mcp.json` 与 `settings.json` 走目标优先深合并（只补你缺失的 key，已有配置保留）；`AGENTS.md` 覆盖前先把已有版本备份为 `AGENTS.md.bak`。
 
 ## 维护
 
@@ -129,7 +130,9 @@ pi install /absolute/path/to/dev-plugin
 
 采用 vendor 模式：`scripts/sync-sources.js` 根据 **`sources.json` 清单**拉取上游最新资源到 `skills/`、`agents/`、`prompts/`、`commands/`。同步流程带备份回退：拉取前把将被覆盖的旧资源移到 `.cache/sources/`，全部成功才删除备份，任一失败则回退到同步前状态；上次 vendor 但本次清单不再包含的资源会被自动移除；**清单之外的目录视为个人资源，不做任何改动**。
 
-**发版前运行 `npm run sync` 并提交生成的 skills、agents、Kimi MCP 清单和 `sources-lock.json`**。各客户端需使用上文各自的插件/package 更新命令。vendor skills 和 agents 是发版时提交的快照；`.mcp.json` 中的 `chrome-devtools-mcp@latest` 则在实际运行时解析 npm 最新版本，不受插件版本固定。
+**发版前运行 `npm run sync` 并提交生成的 skills、agents、Kimi MCP 清单和 `sources-lock.json`**。各客户端需使用上文各自的插件/package 更新命令。vendor skills 和 agents 是发版时提交的快照；`.mcp.json` 中的 MCP server 同样锁定具体版本（如 `chrome-devtools-mcp@1.12.0`)，升级时手改版本号再跑 `npm run sync`。
+
+发版前可先跑 `npm run check` 做离线体检（清单版本一致、SKILL.md frontmatter、lock 与磁盘对齐、MCP 清单同步）；`node scripts/sync-sources.js --check` 只报告上游是否有更新，不落盘。
 
 新增第三方资源：按 `.agents/skills/add-external-skill/SKILL.md` 编辑 `sources.json` 对应类型的数组，条目格式：
 
@@ -162,8 +165,8 @@ pi install /absolute/path/to/dev-plugin
 ```
 
 - `path`：资源所在目录（默认按类型：`skills` / `agents` / `prompts` / `commands`），skills 递归发现含 `SKILL.md` 的目录，agents/prompts 递归发现 `.md` 文件，commands 递归发现 `.md` 与 `.toml` 文件（`.toml` 提取 `description` + `prompt` 转成带 frontmatter 的 `.md`）；同仓库多个资源目录可配置多条；skills 的特殊值 `"."` 表示整个仓库即一个 skill；plugins 条目的 `path` / `include` / `exclude` 写在 `capabilities` 的条目里（相对仓库根）
-- `include`：只拉取列出的资源名；省略则全量
-- `exclude`：排除列出的资源名
+- `include`：只拉取列出的资源名；省略则全量；支持 `*` / `?` glob（如 `"principle-*"`）
+- `exclude`：排除列出的资源名；同样支持 glob
 - `capabilities`（仅 plugins）：与顶层清单同构的字典，键为能力名（`skills` / `agents` / `commands` / `prompts`），值为条目数组，条目字段与顶层一致（`path` / `include` / `exclude`，无 `repo`）；`true` 表示按约定目录全量拆解，同一能力可写多条条目，省略则拆解全部能力
 
 **plugins 类型**用于整个第三方插件仓库：按约定目录自动拆解——`skills/` → `skills/`、`agents/` → `agents/`、`commands/` → `commands/`、`prompts/` → `prompts/`。hooks / mcp / extensions 涉及自动执行代码与环境配置，**不做自动拆解**（需要 MCP 时手工评估后加进 `.mcp.json`）；插件至少需命中一个能力目录，否则同步报错。
@@ -174,7 +177,7 @@ pi install /absolute/path/to/dev-plugin
 
 只改 `.mcp.json`，然后运行 `node scripts/sync-mcp.js`（脚本会同步生成 `mcp.json` 并内联到 `kimi.plugin.json`）。Claude / Codex 直接读 `.mcp.json`，无需手动同步。发版前仍需按上文执行完整的 `npm run sync`。
 
-> 注：Agent Plugins 1.0 规范要求根目录为 `mcp.json`；Kimi 的 `mcpServers` 内联在 `kimi.plugin.json`，这就是同步脚本存在的原因。本包的 `postinstall` 会通过 `scripts/setup-pi.js` 把 MCP 写入 pi 的全局配置，覆盖行为见安装说明。
+> 注：Agent Plugins 1.0 规范要求根目录为 `mcp.json`；Kimi 的 `mcpServers` 内联在 `kimi.plugin.json`，这就是同步脚本存在的原因。本包的 `postinstall` 会通过 `scripts/setup-pi.js` 把 MCP 合并进 pi 的全局配置（保留你已有的 mcpServers)，行为见安装说明。
 
 ### 版本号
 

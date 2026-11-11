@@ -7,8 +7,13 @@
  *   - repo：git 仓库 URL
  *   - path：资源所在目录，省略时按类型取默认（与类型同名）；plugins 不支持（写进 capabilities 条目）
  *     skills 特殊值 "."：整个仓库即一个 skill（SKILL.md 在仓库根目录），skill 名取仓库名
- *   - include：只拉取列出的资源名；省略则全量；plugins 不支持（写进 capabilities 条目）
- *   - exclude：排除列出的资源名；plugins 不支持（同上）
+ *   - include：只拉取列出的资源名；省略则全量；plugins 不支持（写进 capabilities 条目）；支持 * / ? glob（如 "principle-*"）
+ *   - exclude：排除列出的资源名；plugins 不支持（同上）；同样支持 glob
+ *
+ * 落地归一化：skill 目录复制进 skills/ 后，自动把 SKILL.md frontmatter 的 name 改写为目录名
+ * （部分上游的 name 带前缀，与目录不一致会让按 name 路由的工具找不到或重复注册）。
+ *
+ * --check：只核对上游 HEAD 与 sources-lock.json 是否一致并打印报告，不克隆、不写盘（恒 exit 0）。
  *   - capabilities（仅 plugins）：与顶层清单同构的字典（只是没有 plugins 键），键为能力名，值为条目数组
  *       { "skills": [{ "path": "custom-dir", "include": [...], "exclude": [...] }], "commands": true }
  *       - 键固定为 skills / agents / commands / prompts，写错会被跳过并告警
@@ -217,6 +222,26 @@ function collectPlugin(entry, clonedDir, tryAdd) {
   }
 }
 
+/**
+ * 归一化已落地 skill 的 frontmatter name 为目录名。
+ * 部分上游的 name 带前缀（如 vercel-composition-patterns），与目录不一致时，
+ * 按 name 路由的工具会找不到或重复注册；统一在 sync 时改写，代替手工修 vendor 文件。
+ */
+function normalizeSkillName(target) {
+  const file = path.join(target, "SKILL.md");
+  if (!fs.existsSync(file)) return;
+  const text = fs.readFileSync(file, "utf8");
+  if (!text.startsWith("---")) return;
+  const fmEnd = text.indexOf("\n---", 3);
+  if (fmEnd === -1) return;
+  const dir = path.basename(target);
+  const fm = text.slice(0, fmEnd);
+  const m = fm.match(/^name:\s*"?([^"\n]+)"?\s*$/m);
+  if (!m || m[1].trim() === dir) return;
+  fs.writeFileSync(file, fm.replace(/^name:.*$/m, `name: ${dir}`) + text.slice(fmEnd));
+  console.log(`[sync-sources] 归一化 name: ${m[1].trim()} → ${dir}`);
+}
+
 // 四类资源的发现与落地规则
 const TYPES = {
   skills: { targetDir: "skills", defaultPath: "skills", isDir: true },
@@ -234,6 +259,41 @@ for (const key of Object.keys(manifest)) {
     console.error(`[sync-sources] 未知资源类型: ${key}（支持: ${Object.keys(TYPES).join(" / ")} / plugins）`);
     process.exit(1);
   }
+}
+
+// --check：只核对上游 commit 与 lock 的一致性并打印报告，不克隆、不写盘
+if (process.argv.includes("--check")) {
+  const repos = new Set();
+  for (const entries of Object.values(manifest)) {
+    if (Array.isArray(entries)) {
+      for (const e of entries) if (e && typeof e.repo === "string") repos.add(e.repo);
+    }
+  }
+  const heads = new Map();
+  for (const repo of repos) {
+    try {
+      heads.set(repo, git(["ls-remote", repo, "HEAD"], root).split(/\s+/)[0].slice(0, 7));
+    } catch (err) {
+      console.warn(`[sync-sources] ${repo}: ls-remote 失败（${err.message}）`);
+    }
+  }
+  const oldLock = fs.existsSync(lockFile) ? JSON.parse(fs.readFileSync(lockFile, "utf8")) : {};
+  let stale = 0;
+  for (const [type, locked] of Object.entries(oldLock)) {
+    for (const [name, meta] of Object.entries(locked)) {
+      const head = heads.get(meta.repo);
+      const onDisk = fs.existsSync(
+        path.join(root, TYPES[type]?.targetDir ?? type, name + (TYPES[type]?.isDir ? "" : ".md")),
+      );
+      if (head && head !== meta.commit) {
+        stale++;
+        console.log(`[check] 过期 ${type}/${name}: locked=${meta.commit} upstream=${head}（${meta.repo}）`);
+      }
+      if (!onDisk) console.log(`[check] 未落盘 ${type}/${name}`);
+    }
+  }
+  console.log(`[check] 完成：${stale} 个上游有更新`);
+  process.exit(0);
 }
 
 fs.mkdirSync(backupDir, { recursive: true });
@@ -296,6 +356,20 @@ const checkoutCached = (repo) => {
   return repoCache.get(repo);
 };
 
+/** include/exclude 匹配：支持精确名与 * / ? glob（不区分大小写） */
+function matchAny(patterns, name) {
+  if (!Array.isArray(patterns)) return false;
+  return patterns.some((p) => {
+    if (typeof p !== "string") return false;
+    if (!/[?*]/.test(p)) return p === name;
+    const re = new RegExp(
+      "^" + p.replace(/[.+^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*").replace(/\?/g, ".") + "$",
+      "i",
+    );
+    return re.test(name);
+  });
+}
+
 // 解析出本次要同步的资源列表
 const planned = []; // { type, name, source, repo, commit, content? }
 const plannedKeys = new Set(); // "type:name"（小写），O(1) 去重并挡掉大小写不敏感文件系统上的碰撞
@@ -312,8 +386,8 @@ try {
 
       const tryAdd = (resourceType, name, source, extra = {}) => {
         const { filters = {}, ...rest } = extra;
-        if (filters.include && !filters.include.includes(name)) return;
-        if (filters.exclude && filters.exclude.includes(name)) return;
+        if (filters.include && !matchAny(filters.include, name)) return;
+        if (filters.exclude && matchAny(filters.exclude, name)) return;
         const key = `${resourceType}:${name}`.toLowerCase();
         if (plannedKeys.has(key)) {
           console.warn(`[sync-sources] 跳过重名 ${resourceType}: ${name}（${entry.repo}）`);
@@ -408,6 +482,7 @@ try {
         recursive: true,
         filter: (src) => !src.split(path.sep).includes(".git"),
       });
+      normalizeSkillName(target);
     } else if (p.content !== undefined) {
       fs.writeFileSync(target, p.content);
     } else {
