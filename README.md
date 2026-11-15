@@ -167,11 +167,16 @@ pi install /absolute/path/to/dev-plugin
 - `path`：资源所在目录（默认按类型：`skills` / `agents` / `prompts` / `commands`），skills 递归发现含 `SKILL.md` 的目录，agents/prompts 递归发现 `.md` 文件，commands 递归发现 `.md` 与 `.toml` 文件（`.toml` 提取 `description` + `prompt` 转成带 frontmatter 的 `.md`）；同仓库多个资源目录可配置多条；skills 的特殊值 `"."` 表示整个仓库即一个 skill；plugins 条目的 `path` / `include` / `exclude` 写在 `capabilities` 的条目里（相对仓库根）
 - `include`：只拉取列出的资源名；省略则全量；支持 `*` / `?` glob（如 `"principle-*"`）
 - `exclude`：排除列出的资源名；同样支持 glob
-- `capabilities`（仅 plugins）：与顶层清单同构的字典，键为能力名（`skills` / `agents` / `commands` / `prompts`），值为条目数组，条目字段与顶层一致（`path` / `include` / `exclude`，无 `repo`）；`true` 表示按约定目录全量拆解，同一能力可写多条条目，省略则拆解全部能力
+- `alias`：上游资源名 → 本地名（键为精确名，不支持 glob），用于与已有资源同名时共存；`include` / `exclude` 仍按上游名匹配，落地目录、frontmatter `name`、lock 键用本地名（lock 另记 `upstream`），未命中的键会告警
+- `capabilities`（仅 plugins）：与顶层清单同构的字典，键为能力名（`skills` / `agents` / `commands` / `prompts`），值为条目数组，条目字段与顶层一致（`path` / `include` / `exclude` / `alias`，无 `repo`）；`true` 表示按约定目录全量拆解，同一能力可写多条条目，省略则拆解全部能力
 
 **plugins 类型**用于整个第三方插件仓库：按约定目录自动拆解——`skills/` → `skills/`、`agents/` → `agents/`、`commands/` → `commands/`、`prompts/` → `prompts/`。hooks / mcp / extensions 涉及自动执行代码与环境配置，**不做自动拆解**（需要 MCP 时手工评估后加进 `.mcp.json`）；插件至少需命中一个能力目录，否则同步报错。
 
-同名资源冲突时后到者被跳过并告警。
+撞名时：清单内部重名，后到者被跳过并告警，需要共存就加 `alias`；要落成同名个人资源，直接中止并提示加 `alias`，不会静默覆盖。例如把前端的 `unslop` 落成 `unslop-ui`，与已有的 `unslop` 并存：
+
+```json
+{ "repo": "https://github.com/heydamir/unslop.git", "path": "skills", "include": ["unslop"], "alias": { "unslop": "unslop-ui" } }
+```
 
 ### 新增 MCP server
 

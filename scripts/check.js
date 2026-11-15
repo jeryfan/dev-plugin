@@ -7,7 +7,7 @@
  * 2. 每个 skills/<name>/SKILL.md 有合法 frontmatter（name == 目录名、description 非空）
  * 3. sources-lock.json 里的资源全部落盘（无"lock 有、磁盘无"的漂移）
  * 4. mcp.json / kimi.plugin.json 与 .mcp.json 一致（等价于跑过 sync-mcp）
- * 5. sources.json 条目结构合法（每个条目有 repo 字符串）
+ * 5. sources.json 条目结构合法（每个条目有 repo 字符串；alias 是「上游名 → 本地名」映射）
  * 6. package.json 的 pi.* 本地路径存在（node_modules 依赖在 CI 上跳过）
  */
 const fs = require("node:fs");
@@ -103,16 +103,39 @@ if (src && src.mcpServers) {
 	console.log("[check] MCP 清单一致");
 }
 
-// 5. sources.json 结构
+// 5. sources.json 结构（alias 只查形状；本地名的字符与后缀规则由 sync-sources 负责，避免两处规则漂移）
 const manifest = readJson("sources.json");
 if (manifest) {
 	const VALID = new Set(["skills", "agents", "prompts", "commands", "plugins"]);
+	const checkAlias = (alias, where) => {
+		if (alias === undefined) return;
+		if (!alias || typeof alias !== "object" || Array.isArray(alias)) {
+			return fail(`${where}: alias 必须是对象（{ "<上游名>": "<本地名>" }）`);
+		}
+		// 本地名的字符 / 后缀校验由 sync-sources 负责，这里只挡形状错误
+		for (const [from, to] of Object.entries(alias)) {
+			if (typeof to !== "string" || !to.trim()) fail(`${where}: alias["${from}"] 的本地名必须是非空字符串`);
+		}
+	};
 	for (const [type, entries] of Object.entries(manifest)) {
 		if (!VALID.has(type)) fail(`sources.json 未知类型: ${type}`);
 		else if (!Array.isArray(entries)) fail(`sources.json ${type} 不是数组`);
 		else
 			for (const e of entries) {
-				if (!e || typeof e.repo !== "string" || !e.repo) fail(`sources.json ${type} 有条目缺 repo`);
+				if (!e || typeof e.repo !== "string" || !e.repo) {
+					fail(`sources.json ${type} 有条目缺 repo`);
+					continue;
+				}
+				if (type !== "plugins") {
+					checkAlias(e.alias, `sources.json ${type} (${e.repo})`);
+					continue;
+				}
+				if (e.alias !== undefined) warn(`sources.json plugins 条目 (${e.repo}) 的 alias 应写在 capabilities 的条目里`);
+				for (const [cap, specs] of Object.entries(e.capabilities || {})) {
+					for (const spec of Array.isArray(specs) ? specs : []) {
+						if (spec && typeof spec === "object") checkAlias(spec.alias, `sources.json plugins ${cap} (${e.repo})`);
+					}
+				}
 			}
 	}
 }

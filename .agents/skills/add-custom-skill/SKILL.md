@@ -20,14 +20,14 @@ description: Create a personal skill in dev-plugin's skills/ directory that is s
 
 - 目录名 = skill 名：小写字母、数字、连字符，如 `my-workflow`
 - `frontmatter.name` 必须与目录名一致
-- **禁止与 vendor skill 同名**：重名时 `npm run sync` 会把 `skills/<name>` 备份到 `.cache/sources/` 后再写入上游版本，成功后删除备份——**你的版本会被静默覆盖且不可恢复**
+- **不要与 vendor skill 同名**（名字出现在 `sources-lock.json` 中）：重名时 `npm run sync` 会把 `skills/<name>` 备份到 `.cache/sources/` 后再写入上游版本，成功后删除备份——**你的版本会被静默覆盖且不可恢复**。反过来，若清单条目要落成你的个人目录名（不在 lock 中），同步会中止并提示给清单条目加 `alias`
 
 ## 操作步骤
 
 1. **重名检查**（必做，跳过会有数据丢失风险）：
 
    ```bash
-   cat sources-lock.json | grep '"<name>"'   # 有输出 = 撞 vendor 名，换名
+   cat sources-lock.json | grep '"<name>"'   # 有输出 = 撞 vendor 名，换名，或让 vendor 条目用 alias 让位
    ls skills/                                # 检查现有 skill
    ```
 
@@ -65,6 +65,6 @@ description: Create a personal skill in dev-plugin's skills/ directory that is s
 
    - `name` 与目录名一致，且不在 `sources-lock.json` 中
    - SKILL.md 能被正常解析（frontmatter 用 `---` 包裹，无多余符号）
-   - 跑一次 `npm run sync` 确认这个目录没出现在输出里（出现了说明撞名）
+   - 跑一次 `npm run sync`：目录**不该**出现在输出里；出现「撞名 skills/<name>」中止说明与清单冲突，改名或给清单条目加 `alias`
 
 6. 提醒用户：提交 `skills/<name>/` 后发版

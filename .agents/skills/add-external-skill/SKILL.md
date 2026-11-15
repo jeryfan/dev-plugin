@@ -35,6 +35,7 @@ description: Add a third-party skill/agent/prompt/command repo or a whole plugin
 | `path` | 否 | 资源所在目录。skills 下每个含 `SKILL.md` 的子目录即一个 skill，agents/prompts 下每个 `.md` 文件即一个资源，commands 下每个 `.md` / `.toml` 文件即一个命令；省略时按类型取同名默认目录。**plugins 条目不支持**，写到 `capabilities` 的条目里（相对仓库根）。skills 的特殊值 `"."`：整个仓库即一个 skill（`SKILL.md` 在仓库根目录），skill 名取仓库名 |
 | `include` | 否 | 只拉取列出的资源名；省略则全量。**plugins 条目不支持**，写到 `capabilities` 的条目里 |
 | `exclude` | 否 | 排除列出的资源名，在 include 之后生效。同上，plugins 条目不支持 |
+| `alias` | 否 | 上游资源名 → 本地名（`{ "unslop": "unslop-ui" }`），用于和已有资源同名时共存。**plugins 条目不支持**，写到 `capabilities` 的条目里；见下文「同名资源（alias）」 |
 | `capabilities` | 否（仅 plugins） | 与顶层清单同构的字典（只是没有 `plugins` 键），见下节 |
 
 ## plugins 类型（整个插件仓库）
@@ -50,7 +51,7 @@ description: Add a third-party skill/agent/prompt/command repo or a whole plugin
 
 ### capabilities 字段
 
-`capabilities` 是**与顶层清单同构的字典**：键是能力名，值是条目数组，条目字段与顶层一致（`path` / `include` / `exclude`），只是**没有 `repo`**（repo 在 plugin 条目层）：
+`capabilities` 是**与顶层清单同构的字典**：键是能力名，值是条目数组，条目字段与顶层一致（`path` / `include` / `exclude` / `alias`），只是**没有 `repo`**（repo 在 plugin 条目层）：
 
 ```json
 "capabilities": {
@@ -73,7 +74,21 @@ description: Add a third-party skill/agent/prompt/command repo or a whole plugin
 2. 显式声明的能力目录不存在时会告警；省略 `capabilities` 时不告警
 3. hooks / mcp / extensions **不做自动拆解**（涉及自动执行代码与环境配置，有安全风险）；上游含这些能力时忽略，需要 MCP 时手工评估后加进 `.mcp.json`
 4. 插件必须至少命中一个能力目录，否则同步报错
-5. 拆解后的资源与 skills / agents / prompts / commands 类型的记录共享命名空间，重名会被跳过并告警
+5. 拆解后的资源与 skills / agents / prompts / commands 类型的记录共享命名空间，重名会被跳过并告警（需要共存时给条目加 `alias`）
+
+## 同名资源（alias）
+
+上游资源名与已有资源撞名时，用 `alias` 换成本地名共存：
+
+```json
+{ "repo": "https://github.com/heydamir/unslop.git", "path": "skills", "include": ["unslop"], "alias": { "unslop": "unslop-ui" } }
+```
+
+落地为 `skills/unslop-ui/`，frontmatter `name` 同步改为 `unslop-ui`，lock 记 `upstream: "unslop"`。
+
+- `include` / `exclude` 按上游名匹配，alias 的键是精确名（不支持 glob）；只影响落地名
+- 本地名不能含路径分隔符 / 空白、不能以 `.` 开头；agents / prompts / commands 不加 `.md` / `.toml`
+- alias 键未命中、或与清单内其他记录撞名，会告警；与个人资源同名则中止同步
 
 ## commands 类型（斜杠命令）
 
@@ -92,12 +107,12 @@ description: Add a third-party skill/agent/prompt/command repo or a whole plugin
 
 1. 同一仓库有多个资源目录时，配置多条记录，各自设置 `path`
 2. 添加前先确认上游仓库中资源的实际位置，设置准确的 `path`，不要依赖递归兜底
-3. 与其他记录或个人资源同名的资源会被跳过并告警，发现告警需处理（换 include/exclude 或放弃）
+3. 与清单内其他记录同名的资源会被跳过并告警，需要共存时加 `alias`；与个人资源同名会直接中止同步，同样用 `alias` 换本地名
 4. 不要手工在 `skills/`、`agents/`、`prompts/`、`commands/` 下创建 vendor 资源，一切通过清单 + 脚本完成
 
 ## 操作步骤
 
-1. 在 `sources.json` 对应类型的数组中追加记录
-2. 运行 `npm run sync`，确认目标资源出现在输出中且无报错/告警
-3. 检查 `skills/<name>/SKILL.md`（或 `agents/`、`prompts/`、`commands/` 下的 .md 文件）存在且内容正确
+1. 在 `sources.json` 对应类型的数组中追加记录（撞名时按「同名资源（alias）」加 `alias`）
+2. 运行 `npm run sync`，确认目标资源出现在输出中且无报错/告警；用了 alias 的行显示为 `unslop → unslop-ui（alias）`
+3. 检查 `skills/<name>/SKILL.md`（或 `agents/`、`prompts/`、`commands/` 下的 .md 文件）存在且内容正确；`<name>` 是 alias 之后的本地名
 4. 提醒用户：提交 `sources.json`、资源目录、`sources-lock.json` 后发布

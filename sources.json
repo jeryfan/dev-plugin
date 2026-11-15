@@ -53,6 +53,12 @@
         "react-view-transitions",
         "composition-patterns"
       ]
+    },
+    {
+      "repo": "https://github.com/heydamir/unslop.git",
+      "path": "skills",
+      "include": ["unslop"],
+      "alias": { "unslop": "unslop-ui" }
     }
   ],
   "agents": [

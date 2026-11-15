@@ -5,7 +5,7 @@
 ## 目录规则
 
 - `skills/`：分发的 skill 源，四个工具共用
-  - **个人 skill**：直接在 `skills/<name>/` 下维护，同步脚本不碰（不在 `sources-lock.json` 中即视为个人资源）
+  - **个人 skill**：直接在 `skills/<name>/` 下维护，同步脚本不碰（不在 `sources-lock.json` 中即视为个人资源）；清单要落成与之同名的资源时会中止并提示改用 `alias`，不会被静默覆盖
   - **vendor skill**：来自第三方仓库，由脚本同步进 `skills/`，**不要手工编辑**（会被下次同步覆盖）；识别方式是在 `sources-lock.json` 中有记录
 - `commands/`：斜杠命令（vendor 或个人）。Claude 自动发现插件根的 `commands/`；Kimi 由 `kimi.plugin.json` 的 `commands` 字段声明；pi 通过 `package.json` 的 `pi.prompts` 读取
 - `extensions/`：pi 扩展（通用命令扩展），由 `package.json` 的 `pi.extensions` 随包分发给安装者；
@@ -32,6 +32,7 @@ npm run sync   # = sync-mcp（MCP）+ sync-sources（第三方 skills / agents /
 ```
 
 - `sync-sources.js` 按 `sources.json` 浅克隆上游最新版复制进 `skills/`、`agents/`、`prompts/`、`commands/`，带备份回退；清单外的目录（个人资源）不动；上次 vendor 但本次清单不再包含的资源会被自动移除；`include`/`exclude` 支持 `*` / `?` glob；skill 落地时自动把 frontmatter 的 `name` 归一化为目录名；`--check` 只查上游版本不落盘
+- 撞名用 `alias`（`{ "上游名": "本地名" }`，`capabilities` 条目同样支持）：过滤仍按上游名，落地名 / frontmatter `name` / lock 键用本地名；与个人资源同名时同步中止并提示用 alias，不会覆盖
 - 发版流程：`npm run check` → `npm run sync` → `npm run bump-version -- <semver>`（bump `plugin.json`、`.claude-plugin/plugin.json`、`.codex-plugin/plugin.json`、`kimi.plugin.json`、`package.json`）→ 提交推送
 
 ## 添加 skills
