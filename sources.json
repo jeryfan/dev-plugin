@@ -1,11 +1,6 @@
 {
   "skills": [
     {
-      "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "path": ".claude/skills",
-      "include": ["ui-ux-pro-max", "slides"]
-    },
-    {
       "repo": "https://github.com/anthropics/claude-plugins-official.git",
       "path": "plugins/frontend-design/skills",
       "include": ["frontend-design"]

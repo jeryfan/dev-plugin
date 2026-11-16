@@ -1,13 +1,5 @@
 {
   "skills": {
-    "slides": {
-      "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "d643997"
-    },
-    "ui-ux-pro-max": {
-      "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
-      "commit": "d643997"
-    },
     "frontend-design": {
       "repo": "https://github.com/anthropics/claude-plugins-official.git",
       "commit": "b5b01ac"
@@ -22,19 +14,19 @@
     },
     "ego-browser": {
       "repo": "https://github.com/citrolabs/ego-lite.git",
-      "commit": "bacaece"
+      "commit": "f499162"
     },
     "mcp-builder": {
       "repo": "https://github.com/anthropics/skills.git",
-      "commit": "1780c5e"
+      "commit": "e4bb5d9"
     },
     "skill-creator": {
       "repo": "https://github.com/anthropics/skills.git",
-      "commit": "1780c5e"
+      "commit": "e4bb5d9"
     },
     "webapp-testing": {
       "repo": "https://github.com/anthropics/skills.git",
-      "commit": "1780c5e"
+      "commit": "e4bb5d9"
     },
     "code-review-and-quality": {
       "repo": "https://github.com/addyosmani/agent-skills.git",
@@ -46,7 +38,7 @@
     },
     "git-commit": {
       "repo": "https://github.com/github/awesome-copilot.git",
-      "commit": "8ecd5b1"
+      "commit": "dc0083d"
     },
     "grilling": {
       "repo": "https://github.com/mattpocock/skills.git",
