@@ -183,7 +183,7 @@ pi install /absolute/path/to/dev-plugin
 只改 `.mcp.json`，然后运行 `node scripts/sync-mcp.js`（脚本会同步生成 `mcp.json` 并内联到 `kimi.plugin.json`）。Claude / Codex 直接读 `.mcp.json`，无需手动同步。发版前仍需按上文执行完整的 `npm run sync`。
 
 > 需要凭据的 server，启动 agent 前导出对应环境变量，token 不要写进仓库：
-> - `gitea`：需 [gitea-mcp](https://gitea.com/gitea/gitea-mcp/releases) 二进制在 `PATH` 中，导出 `GITEA_HOST`（如 `https://git.example.com`）与 `GITEA_TOKEN`
+> - `gitea`：需 [gitea-mcp](https://gitea.com/gitea/gitea-mcp/releases) 二进制在 `PATH` 中，导出 `GITEA_HOST`（如 `https://gitea.com`）与 `GITEA_TOKEN`
 > - `github`：GitHub 官方远程 MCP（`https://api.githubcopilot.com/mcp/`），无需安装，导出 `GITHUB_TOKEN`（GitHub PAT）
 
 > 注：Agent Plugins 1.0 规范要求根目录为 `mcp.json`；Kimi 的 `mcpServers` 内联在 `kimi.plugin.json`，这就是同步脚本存在的原因。本包的 `postinstall` 会通过 `scripts/setup-pi.js` 把 MCP 合并进 pi 的全局配置（保留你已有的 mcpServers)，行为见安装说明。
