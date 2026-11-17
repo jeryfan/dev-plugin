@@ -31,9 +31,10 @@ function readMcpServers() {
   return mcpServers;
 }
 
-/** 补上 Agent Plugins 1.0 要求的 type；配置里已有的 type 优先 */
-function withType(config) {
-  return { type: config.type || (config.url ? "streamable-http" : "stdio"), ...config };
+/** 补上 Agent Plugins 1.0 要求的 type；配置里已有的 type 优先，Claude 的 "http" 映射为标准的 "streamable-http" */
+function withType({ type, ...config }) {
+  const resolved = type === "http" ? "streamable-http" : type || (config.url ? "streamable-http" : "stdio");
+  return { type: resolved, ...config };
 }
 
 function writeStandardMcp(mcpServers) {

@@ -97,8 +97,9 @@ function checkMcp() {
   const mcp = readJson("mcp.json");
   if (mcp) {
     const expected = {};
-    for (const [name, config] of Object.entries(source.mcpServers)) {
-      expected[name] = { type: config.type || (config.url ? "streamable-http" : "stdio"), ...config };
+    for (const [name, { type, ...config }] of Object.entries(source.mcpServers)) {
+      const resolved = type === "http" ? "streamable-http" : type || (config.url ? "streamable-http" : "stdio");
+      expected[name] = { type: resolved, ...config };
     }
     if (JSON.stringify(mcp.mcpServers) !== JSON.stringify(expected)) {
       fail("mcp.json 与 .mcp.json 不一致，请运行 node scripts/sync-mcp.js");

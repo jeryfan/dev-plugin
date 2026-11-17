@@ -27,7 +27,14 @@
       ],
       "env": {
         "GITEA_HOST": "${GITEA_HOST}",
-        "GITEA_ACCESS_TOKEN": "${GITEA_ACCESS_TOKEN}"
+        "GITEA_ACCESS_TOKEN": "${GITEA_TOKEN}"
+      }
+    },
+    "github": {
+      "type": "streamable-http",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "headers": {
+        "Authorization": "Bearer ${GITHUB_TOKEN}"
       }
     }
   }
