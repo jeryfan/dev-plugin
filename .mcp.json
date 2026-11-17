@@ -7,6 +7,14 @@
     "context7": {
       "command": "npx",
       "args": ["-y", "@upstash/context7-mcp@4.7.0"]
+    },
+    "gitea": {
+      "command": "gitea-mcp",
+      "args": ["-t", "stdio"],
+      "env": {
+        "GITEA_HOST": "${GITEA_HOST}",
+        "GITEA_ACCESS_TOKEN": "${GITEA_ACCESS_TOKEN}"
+      }
     }
   }
 }

@@ -17,6 +17,18 @@
         "-y",
         "@upstash/context7-mcp@4.7.0"
       ]
+    },
+    "gitea": {
+      "type": "stdio",
+      "command": "gitea-mcp",
+      "args": [
+        "-t",
+        "stdio"
+      ],
+      "env": {
+        "GITEA_HOST": "${GITEA_HOST}",
+        "GITEA_ACCESS_TOKEN": "${GITEA_ACCESS_TOKEN}"
+      }
     }
   }
 }
